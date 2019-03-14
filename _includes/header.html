@@ -1,0 +1,34 @@
+<aside class="logo">
+
+	{% if page.url == '/index.html' or page.url == '/' %}
+		{% assign link = '/about' %}
+		{% assign prompt = 'About me' %}
+	{% else %}
+		{% assign link = '/' %}
+		{% assign prompt = 'Back to Index' %}
+	{% endif %}
+
+	<a href="{{ link | prepend: site.baseurl | prepend: site.url }}">
+		<img src="{{ site.logo_url }}" class="logo-avatar">
+	</a>
+	<span class="logo-prompt code">{{ prompt }}</span>
+
+</aside>
+
+<aside class="links">
+	<div>Hi, I'm Noah</div>
+	<p></p>
+	<div>I write <a href="https://github.com/ProxymanApp/Proxyman">Proxyman</a> in spare time</div>
+	<p></p>
+    <a href="{{ link | prepend: site.baseurl }}" class="link">{{ prompt }}</a>
+    <span> • </span>
+    <a href="https://github.com/{{ site.github_username }}" title="" target="_blank" class="link">Side Projects</a>
+    <span> • </span>
+    {% if site.github_username %}	
+        <a href="https://github.com/{{ site.github_username }}" title="GitHub Profile" target="_blank" class="link">Github</a>
+        <span> • </span>
+    {% endif %}
+    {% if site.twitter_username %}
+        <a href="https://twitter.com/{{ site.twitter_username }}" title="Twitter Profile" target="_blank" class="link">Twitter</a>
+    {% endif %}
+</aside>

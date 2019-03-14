@@ -1,0 +1,55 @@
+# Site Info
+title:              "Noah Tran's mad lab"
+description:        "Write code"
+author_name:        "Noah Tran"
+logo_url:           https://avatars1.githubusercontent.com/u/5878421?v=4 # Get it from GitHub API: https://api.github.com/users/<username>
+
+# Author Info
+author_name:        "Noah Tran"
+author_email:       vinhnghiatran@gmail.com
+twitter_username:   _nghiatran
+github_username:    NghiaTranUIT
+
+# Google APIs
+# google_verify:      wl88H0UkNVv_YyoYFhSRDjVqNkrteaXOMeCxMBYpwKg
+# google_analytics:   UA-118536100-2
+
+# Site Settings
+url:                https://nghiatranuit.github.io # main url
+baseurl:            /
+permalink:          /:title # Post permalink
+timezone:           Asia/Kuala_Lumpur # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+mathjax:            true  # enables support for mathjax - set to 'false' to disable
+
+# Site Build
+highlighter:        rouge
+markdown:           kramdown
+kramdown:
+    input:          GFM
+sass:
+    style:          :compressed
+
+# Other Params
+include:            [ "robots.txt" ]
+exclude:            [ "LICENSE", "README.md", "CNAME", "vendor", "Gemfile", "script" ]
+plugins:
+  - jekyll-sitemap
+
+
+
+defaults:
+  -
+    scope:
+      path:         ""
+    values:
+      layout:       "null"
+  -
+    scope:
+      type:         "pages"
+    values:
+      layout:       "page"
+  -
+    scope:
+      type:         "posts"
+    values:
+      layout:       "post"
