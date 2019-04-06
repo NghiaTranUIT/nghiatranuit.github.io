@@ -86,12 +86,6 @@ blockquote {
   position: relative;
   margin: 0 auto 35px;
   text-align: center;
-  animation-duration: 0.7s;
-  animation-fill-mode: both;
-  animation-name: bounce;
-  -webkit-animation-duration: 0.7s;
-  -webkit-animation-fill-mode: both;
-  -webkit-animation-name: bounce;
   a {
     background: #ddd url("logo_wrapper.png");
     color: #000;
@@ -374,37 +368,5 @@ section {
         }
       }
     }
-  }
-}
-@keyframes bounce {0% {
-    transform: translate3d( 0, -1000px, 0 );
-  }
-  60% {
-    transform: translate3d( 0, 25px, 0 );
-  }
-  75% {
-    transform: translate3d( 0, -10px, 0 );
-  }
-  90% {
-    transform: translate3d( 0, 5px, 0 );
-  }
-  100% {
-    transform: none;
-  }
-}
-@-webkit-keyframes bounce {0% {
-    -webkit-transform: translate3d( 0, -1000px, 0 );
-  }
-  60% {
-    -webkit-transform: translate3d( 0, 25px, 0 );
-  }
-  75% {
-    -webkit-transform: translate3d( 0, -10px, 0 );
-  }
-  90% {
-    -webkit-transform: translate3d( 0, 5px, 0 );
-  }
-  100% {
-    -webkit-transform: none;
   }
 }
