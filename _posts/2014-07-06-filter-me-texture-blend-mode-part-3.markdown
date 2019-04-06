@@ -42,7 +42,7 @@ window._layerSlider.showNotice('layerslider_1','jquery');
 lsjQuery("#layerslider_1").layerSlider({sliderVersion: '', skinsPath: 'https://nghiatran.me/wp-content/plugins/LayerSlider/static/layerslider/skins/', showCircleTimer: false});
 }
 });
-</script><div class="ls-wp-container fitvidsignore" id="layerslider_1" style="width:1280px;height:720px;margin:0 auto;margin-bottom: 0px;"><div class="ls-slide" data-ls="kenburnsscale:1.2;">![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_9.jpg?resize=640%2C640&ssl=1)![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2014/07/FilterMe_Part3_SlideShow_8.jpg?resize=640%2C640&ssl=1)</div></div>Steps to do  :
+</script><div class="ls-wp-container fitvidsignore" id="layerslider_1" style="width:1280px;height:720px;margin:0 auto;margin-bottom: 0px;"><div class="ls-slide" data-ls="kenburnsscale:1.2;">![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_9.jpg?resize=640%2C640&ssl=1)![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_8.jpg?resize=640%2C640&ssl=1)</div></div>Steps to do  :
 
 1. Download vintage texture brush from Google
 2. Using Photoshop and create your own texture ( by combining brush and blend mode)

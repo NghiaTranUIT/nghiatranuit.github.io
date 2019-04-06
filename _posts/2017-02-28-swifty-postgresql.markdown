@@ -5,11 +5,9 @@ image: https://nghiatran.me/wp-content/uploads/2017/02/swifty-postgre.jpg
 date: '2017-02-28 16:41:55'
 ---
 
-
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/background.png?w=100%25)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/background.png)
 
 I would like to announce my pet project which I’m currently working on 🤗
-
 
 ## Swifty PostgreSQL
 
@@ -25,7 +23,6 @@ It’s also a small component in [Titan app](https://github.com/NghiaTranUIT/Tit
 
 ![](https://img.shields.io/badge/Swift-3.0-blue.svg?style=flat) ![](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat) ![](https://img.shields.io/npm/l/express.svg?style=flat) ![](https://img.shields.io/badge/platform-osx-green.svg?style=flat)
 
-
 ## Features
 
 - PostgreSQL 9.6 driver
@@ -36,7 +33,6 @@ It’s also a small component in [Titan app](https://github.com/NghiaTranUIT/Tit
 - Auto-complete query
 - Fully Test (Quick + Nimble)
 
-
 ## Roadmap
 
 – [x] Sketch  
@@ -46,21 +42,14 @@ It’s also a small component in [Titan app](https://github.com/NghiaTranUIT/Tit
  – [ ] Smart Query  
  – [ ] Write Test
 
-
 ## Github
 
-[su_button url=”https://github.com/NghiaTranUIT/Swifty-PostgreSQL” target=”blank” style=”flat” size=”6″ icon=”icon: github-alt”]Swifty PostgreSQL[/su_button]
-
+[Github](”https://github.com/NghiaTranUIT/Swifty-PostgreSQL)
 
 ## Contributor
 
 It would be greatly appreciated when you make a pull-quest 🤗
 
-
 ## License
 
 Swifty PostgreSQL is available under the MIT license. See the LICENSE file for more info.
-
- 
-
-

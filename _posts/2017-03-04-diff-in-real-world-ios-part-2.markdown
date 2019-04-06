@@ -9,7 +9,7 @@ Hi, it’s part 2 of my LCS series. Hope you have a great day 😇
 
 In this blog, I would like to cover how we can apply LCS (aka. Diff) into iOS Development. It’s so boring if I keep writing blog with “deep” theory, and no place for enjoying.
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/98b322c7bf5992110646420866f72f492bc8706eb4769179676149ad713251d3.jpg)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/98b322c7bf5992110646420866f72f492bc8706eb4769179676149ad713251d3.jpg)
 
 Before diving, we should try a real problem I ensure everybody will encounter if you’re iOS S.E.
 
@@ -67,7 +67,7 @@ self.tableView.endUpdates()
 - If you have enough patient, and careful. You could do it, but who know your solution is the best optimization? Maybe there is someone out there who come up with another comparison, have less “transform” than your result? 🤔 Working manually is not optimize approach.
 - If you make a mistake, your app crash with some kind of error like this
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/lcs-part-2-error.jpg)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/lcs-part-2-error.jpg)
 
 It always happens you indexPaths doesn’t match with data source.
 
@@ -99,7 +99,7 @@ Besides that, I will do benchmark by each solution on my old iPhone 5, give you
 
 ### 1.1 Memorization table
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_12.png)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_12.png)
 
 If you’re not familiar with that memorization-table. I would like to recommend to read [LCS-Diff Part 1](http://nghiatran.me/longest-common-subsequence-diff-part-1/) before going next.
 
@@ -216,7 +216,7 @@ else if table[i][j] == table[i][j-1] {
 }
 ```
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_10.png)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_10.png)
 
 As you can see, G != X. It means, G needs to be removed from A.
 ```swift
@@ -229,7 +229,9 @@ F != X. It means, X need to be added.
 ```swift
 let insert = DiffTransform.insert(i-1, B[j-1])
 ```
+```
 - i == 0 || j ==0
+```
 
 It’s two special case we should mention. Because we need to figure it out the transform, don’t miss this case
 

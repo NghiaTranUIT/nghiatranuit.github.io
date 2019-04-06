@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Longest Common Subsequence Diff [Part 1]
-image: https://nghiatran.me/wp-content/uploads/2017/02/gnu2altkusq-clem-onojeghuo.jpg
 date: '2017-02-16 14:04:46'
 ---
 
@@ -18,17 +17,15 @@ In another hand, diff is also useful to compare pair of images.
 
 - [Kaleidoscope](http://www.kaleidoscopeapp.com) is able to spot the difference of two images with pixel accuracy, and print it out.
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/kaleidoscope-300x79.jpg?resize=762%2C201)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/kaleidoscope.jpg)
 
 - [Facebook iOS Snapshot Test](https://github.com/facebook/ios-snapshot-test-case) make diff by drawing both of layer/view and reference image, then compare each pair of pointer in memory with the C function `memcmp(). `This make it extremely quick: from 0.013 to 0.086 seconds for fullscreen iPad on Macbook Air ([reference](https://www.objc.io/issues/15-testing/snapshot-testing/))
 
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/snapshots-reference-59b0b96b-300x162.png?resize=754%2C407)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/snapshots-reference-59b0b96b.png)
 
 - [IGListKit](https://github.com/Instagram/IGListKit) is amazing open-source, built from Instagram Engineering team. According from their blog, IGListKit still use improved Diff (Paul Heckel’s algorithm) to calculate and perform insert/move/reload/delete without crashed with **linear time BigO(n), **it’s really increadible result.
 
 **![](https://i1.wp.com/cdn-images-1.medium.com/max/1600/1*7w2BL8pAqAs-qMiDWHLENA.gif?resize=541%2C260&ssl=1)**
-
- 
 
 To understand deeply LCS and a apply it to real world. I intent to split into 2 parts.
 
@@ -36,13 +33,27 @@ To understand deeply LCS and a apply it to real world. I intent to split into 2
 
 The main goal, we will extend Array<Element>. Put more effort, so it can reusable in any kind of array.
 
-// Work with generic array // It will work [Any], which Element must adopt with <Equatable> protocol extension Array where Element: Equatable {}
+```swift
+// Work with generic array
+// It will work [Any], which Element must adopt with <Equatable> protocol
+extension Array where Element: Equatable {}
+```
 
 **Part 2:** It’s real world, we reused the knowledge from part 1. Implement Diff, DiffStep to represent each step (insert/delete/reload) need to be transform. Also extend UITableView, UICollectionView to calculate optimize transformation, from old to new Data Source
 
 The goal looks like:
 
-// Calculate diff and map to each actions let insertionIndexPaths = diff.insertions.map({ IndexPath(row: $0.idx, section: self.sectionIndex) }) let deletionIndexPaths = diff.deletions.map({ IndexPath(row: $0.idx, section: self.sectionIndex) }) // Perform action tableView.beginUpdates() tableView.insertRows(at: insertionIndexPaths, with: insertionAnimation) tableView.deleteRows(at: deletionIndexPaths, with: deletionAnimation) tableView.endUpdates()
+```
+// Calculate diff and map to each actions
+let insertionIndexPaths = diff.insertions.map({ IndexPath(row: $0.idx, section: self.sectionIndex) })
+let deletionIndexPaths = diff.deletions.map({ IndexPath(row: $0.idx, section: self.sectionIndex) })
+ 
+// Perform action
+tableView.beginUpdates()
+tableView.insertRows(at: insertionIndexPaths, with: insertionAnimation)
+tableView.deleteRows(at: deletionIndexPaths, with: deletionAnimation)
+tableView.endUpdates()
+```
 
 ^ see that. Really simple for use. If you calculate the diff **manually **by your hand and your pencil, it’s really tricky and risky. If it go wrong, your app might crash completely and you’re fired =)). Brace yourself
 
@@ -61,7 +72,7 @@ LCS of “ABCDEF” and “ATDEXF” is ADEF, length = 4
 
 LCS of “ABC” and “AXYZC” is AC, length = 2
 
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/Longest-Common-Subsequence-example-300x94.jpg?resize=517%2C162)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/Longest-Common-Subsequence-example.jpg)
 
 or A = “acbaed”, B = “abcadf” => LCS is “acad”, length = 4
 
@@ -83,15 +94,11 @@ or A = “acbaed”, B = “abcadf” => LCS is “acad”, length = 4
 
  
 
-[su_divider top=”no” divider_color=”#f3f3f3″ link_color=”#f3f3f3″ size=”2″]
-
 Before walking into Implementation and Explanation section. It would be better if you try putting your hand in real shit.
 
 Don’t worry about performance or Big(O) yet, just finish it by yourself.
 
 You can try online at **[HackerRank](https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence)** with real test-cases 😉
-
-[su_divider top=”no” divider_color=”#f3f3f3″ link_color=”#f3f3f3″ size=”2″]
 
 *if you don’t have enough patient, just scroll down and  keep reading *😪
 
@@ -130,7 +137,10 @@ We start from bottom, so we get “T” from the first one and “T” from the 
 
 It’s match then T **must be a part of LCS**, so we count up by 1. Then we remove both of those, and run recursive continently.
 
-// Case 1 - both characters are matched LCS("ADFGT", "AFOXT") = 1 + LCS("ADFG", "AFOX")
+```swift
+// Case 1 - both characters are matched
+LCS("ADFGT", "AFOXT") = 1 + LCS("ADFG", "AFOX")
+```
 
 **Case 2: Pair of character isn’t match:**
 
@@ -144,13 +154,26 @@ or X could be part of LCS between “ADF” and “AFO**X**”
 
 We don’t know which case is correct. So we should call recursion on two possible case and compare the get max value. We can write down like here
 
+```
 LCS("ADFG", "AFOX") = Max(LCS("ADF", "AFOX"), LCS("ADFG", "AFO"))
+```
 
 ### Summarize
 
 Give 2 string A[0..i-1], and B[0..j-1] with i and j is length of A and B
 
-// Define findLCS func func findLCS(A: String, B: String) {} let m = A.length() let m = B.length() // Case 1 A[m - 1] == B[n - 1] => findLCS(A, B) = 1 + findLCS(A[0..m-2], B[0..n-2]) // Case 2 A[m - 1] != B[n - 1] => findLCS(A, B) = MAX(findLCS(A[0..m-2], B[0..n-1]), findLCS(A[0..m-1], B[0..n-2]))
+```swift
+// Define findLCS func
+func findLCS(A: String, B: String) {}
+let m = A.length()
+let m = B.length()
+ 
+// Case 1
+A[m - 1] == B[n - 1] => findLCS(A, B) = 1 + findLCS(A[0..m-2], B[0..n-2])
+ 
+// Case 2
+A[m - 1] != B[n - 1] => findLCS(A, B) = MAX(findLCS(A[0..m-2], B[0..n-1]), findLCS(A[0..m-1], B[0..n-2]))
+```
 
 ### *Base recursion (exit)
 
@@ -160,7 +183,18 @@ It’s same habit when you come to large building, like CVC cinema or luxury ma
 
 Really to figure it out when we should stop: either if any string become **empty string.**
 
-if A.length() == 0 || B.length() == 0 return 0
+```swift
+// Define findLCS func
+func findLCS(A: String, B: String) {}
+let m = A.length()
+let m = B.length()
+ 
+// Case 1
+A[m - 1] == B[n - 1] => findLCS(A, B) = 1 + findLCS(A[0..m-2], B[0..n-2])
+ 
+// Case 2
+A[m - 1] != B[n - 1] => findLCS(A, B) = MAX(findLCS(A[0..m-2], B[0..n-1]), findLCS(A[0..m-1], B[0..n-2]))
+```
 
 
 ## 1.2 Problem
@@ -175,10 +209,55 @@ In next section, we should come up with **Dynamic Programming** approach.
 
 Here is swift code
 
-// Hack convention // Don't mess up with Range from Swift 3 extension String { func charAt(_ i: Int) -> String { return String((self as NSString).character(at: i)) } } ///////////////////////////// // NAIVE APPROACH ///////////////////////////// // Recurvise func to length of LCS func LCS(_ a: String, _ b: String) -> Int{ // Exit if a.characters.count == 0 || b.characters.count == 0 { return 0 } // Prepare let lengthA = a.characters.count let lengthB = b.characters.count let aIndex = a.index(a.endIndex, offsetBy: -1) let bIndex = b.index(b.endIndex, offsetBy: -1) // Sub-problem if a.charAt(lengthA - 1) == b.charAt(lengthB - 1) { // MATCH return 1 + LCS(a.substring(to: aIndex), b.substring(to: bIndex)) } else { // NOT MATCH return max(LCS(a.substring(to: aIndex), b), LCS(a, b.substring(to: bIndex))) } } // Test let a = "acbaed" let b = "abcadf" print(LCS(a, b)) // 4 // Unicode let x = "😇🙌😉💰🎹" let y = "🙌🍒💰✈️🎹😎🔴" print(LCS(x, y)) // 3
-
-Swift Playground [su_button url=”https://github.com/NghiaTranUIT/LCS-Swift/blob/master/LCS-Naive-Solution-Part-1.playground/Contents.swift” target=”blank” style=”flat” size=”6″ icon=”icon: github-alt”]LCS – Naive Solution[/su_button]
-
+```swift
+// Hack convention
+// Don't mess up with Range from Swift 3
+extension String {
+    func charAt(_ i: Int) -> String {
+        return String((self as NSString).character(at: i))
+    }
+}
+ 
+/////////////////////////////
+// NAIVE APPROACH
+/////////////////////////////
+// Recurvise func to length of LCS
+func LCS(_ a: String, _ b: String) -> Int{
+    
+    // Exit
+    if a.characters.count
+        == 0 || b.characters.count == 0 {
+        return 0
+    }
+    
+    // Prepare
+    let lengthA = a.characters.count
+    let lengthB = b.characters.count
+    let aIndex = a.index(a.endIndex, offsetBy: -1)
+    let bIndex = b.index(b.endIndex, offsetBy: -1)
+ 
+    // Sub-problem
+    if a.charAt(lengthA - 1) == b.charAt(lengthB - 1) {
+        // MATCH
+        return 1 + LCS(a.substring(to: aIndex), b.substring(to: bIndex))
+    } else {
+        // NOT MATCH
+        return max(LCS(a.substring(to: aIndex), b), LCS(a, b.substring(to: bIndex)))
+    }
+}
+ 
+ 
+// Test
+let a = "acbaed"
+let b = "abcadf"
+print(LCS(a, b)) // 4
+ 
+// Unicode
+let x = "😇🙌😉💰🎹"
+let y = "🙌🍒💰✈️🎹😎🔴"
+print(LCS(x, y)) // 3
+```
+[Swift Playground on github](https://github.com/NghiaTranUIT/LCS-Swift/blob/master/LCS-Naive-Solution-Part-1.playground/Contents.swift)
 
 ## 2. Dynamic Programming
 
@@ -199,29 +278,41 @@ A = “ADFGT” and B = “AFOXT”, and m is A.length(), n = B.length()
 
 Create two-dimension LCS = [m + 1][n + 1], fill with zero if i == 0 || j == 0
 
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_1-300x264.png?resize=464%2C408)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_1.png)
 
 The reason why we fill the zero, because the empty string “” maybe is LCS as well.
 
 Following two equation we summarized before, but this time, we don’t use recursion, we use 2 nested-loop, and define LCS as 2-dimension array (filled with 0). But still retain the same philosophy.
 
-// Defind LCS array (filled with 0 firstly) var LCS = Array(repeating: Array(repeating: 0, count: m + 1), count: n + 1) var i = 1 var j = 1 // Case 1: Match A[i - 1] == B[j - 1] => LCS[i][j] = 1 + LCS[i - 1][j - 1] // Case 2: Not Match A[i - 1] == B[j - 1] => LCS[i][j] = MAX(LCS([i - 1][j]), LCS(LCS[i][j - 1]))
+```swift
+// Defind LCS array (filled with 0 firstly)
+var LCS = Array(repeating: Array(repeating: 0, count: m + 1), count: n + 1)
+var i = 1
+var j = 1
+ 
+// Case 1: Match
+A[i - 1] == B[j - 1] => LCS[i][j] = 1 + LCS[i - 1][j - 1]
+ 
+// Case 2: Not Match
+A[i - 1] == B[j - 1] => LCS[i][j] = MAX(LCS([i - 1][j]), LCS(LCS[i][j - 1]))
+```
 
 Here is the visualize of them
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_2-266x300.png?resize=264%2C297)![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_4.png?resize=482%2C278)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_2.png)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_4.png)
 
 Simple af right?  😉
 
 We start to iterate over table with i = 1, and j = 1. We have A[i – 1] == “A”, B[j – 1] == “A” => It matches, so we do Case 1
 
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_5-300x251.png?resize=408%2C341)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_5.png)
 
 => LCS[1][1] = 1 + LCS[0][0] = 1
 
 Continue with i = 1, j = 2. We compare A[i – 1] != B[j – 1] => “A” != “F” => We do Case 2.
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_6-300x252.png?resize=433%2C364)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_6.png)
 
 Yeah, so can see, by following case 2, we will compare the value of LCS[1][1] and LCS[0][2].
 
@@ -231,13 +322,13 @@ LCS[1][2] = max(LCS[1][1], LCS[0][2])
 
 Keep computing by your hand + brain to the rest of table.
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_7-300x257.png?resize=441%2C378)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_7.png)
 
 => See that 😉 just do it with case 1 again
 
 Until the end.
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_8-300x249.png?resize=449%2C372)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_8.png)
 
 Finally, we got it. So the Length of LCS is 3.
 
@@ -249,19 +340,27 @@ To print LCS in memorization table is tricky. Because we should traceback the 
 
 - if A[i] == B[j] => It means, this element must be a part of LCS, so we print it, we will go to diagonal (means last char­ac­ter of both string has matched, so we reduce the length of both the strings by 1, so we move diag­o­nally)
 
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_9-300x261.png?resize=400%2C348)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_9.png)
 
 - if A[i] != B[j], we have two sub-case here. Please check my code
 
-LCS[i][j] = Max(LCS[i - 1][j], LCS[i][j - 1]); if (LCS[i][j] == LCS[i - 1][j]) { solution[i][j] = "top"; } else { solution[i][j] = "left"; }
+```swift
+LCS[i][j] = Max(LCS[i - 1][j], LCS[i][j - 1]);
+if (LCS[i][j] == LCS[i - 1][j]) {
+    solution[i][j] = "top";
+} else {
+    solution[i][j] = "left";
+}
+```
 
 Here is visualize
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_10-300x205.png?resize=476%2C325)![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_11-300x280.png?resize=343%2C320)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_10.png)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_11.png)
 
 Keep traceback-ing to the top of memorization table 🤗. We will have somethings like below. Please notice, the Red Cell is the character we need to store somewhere, because it’s part of LCS.
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_12-300x256.png?resize=413%2C352)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_12.png)
 
 The final result is AFT 🙌
 
@@ -296,7 +395,31 @@ By reducing or bounding the upper/lower limitation, we can save tons of memory a
 
 Here is presudo-code
 
-func TrimLCS(A: String, B: String) { var start = 0 var aEnd = A.length() var bEnd = B.length() // Get index of beginning of file while start < aEnd && start < bEnd && A[start] == B[start] { start += 1 } // Get index of End of file while start ≤ aEnd and start ≤ bEnd and A[aEnd] == B[bEnd] { aEnd -= 1 bEnd -= 1 } // Trim let newA = A.trim(start..aEnd) let newB = B.trim(start..bEnd) // Keep doing LCS algorithm here for ... }
+```swift
+func TrimLCS(A: String, B: String) {
+    var start = 0
+    var aEnd = A.length()
+    var bEnd = B.length()
+ 
+    // Get index of beginning of file
+    while start < aEnd && start < bEnd && A[start] == B[start] {
+        start += 1
+    }
+ 
+    // Get index of End of file
+    while start ≤ aEnd and start ≤ bEnd and A[aEnd] == B[bEnd] {
+        aEnd -= 1
+        bEnd -= 1
+    } 
+ 
+    // Trim 
+    let newA = A.trim(start..aEnd)
+    let newB = B.trim(start..bEnd)
+ 
+    // Keep doing LCS algorithm here
+    for ...
+}
+```
 
 ### Reduce the comparison time
 
@@ -325,7 +448,11 @@ If you’re not familiar with Generic, Equatable, Element in Array. Don’t hesi
 
 The extension look like below.
 
-//// Extension of Array // But we must ensure, each element must adopt with <Equatable> protocol -> We can make comparision extension Array where Element: Equatable {}
+```swift
+//// Extension of Array
+// But we must ensure, each element must adopt with <Equatable> protocol -> We can make comparision
+extension Array where Element: Equatable {}
+```
 
 ### Memorization table
 
@@ -333,7 +460,36 @@ The first thing is Memorization table. Please take a look at visualization I dra
 
 We create table: [[Element]] and run two nested loop, and calculate the length of LCS by following 2 case: MATCH and NOT MATCH
 
-// Memorization table struct MemorizationTable<T: Equatable> { static func buildTable(x: [T], y: [T]) -> [[Int]] { // Create 2-dimension table, and filled with zero let n = x.count let m = y.count var table = Array(repeating: Array(repeating: 0, count: m + 1), count: n + 1) // Iterate from top-left corner -> bottom-right corner for i in 0...n { for j in 0...m { if i == 0 || j == 0 { table[i][j] = 0 } else if x[i-1] == y[j-1] { // MATCH table[i][j] = table[i-1][j-1] + 1 } else { // NOT MATCH table[i][j] = max(table[i-1][j], table[i][j-1]) } } } return table } }
+```swift
+// Memorization table
+struct MemorizationTable<T: Equatable> {
+    
+    static func buildTable(x: [T], y: [T]) -> [[Int]] {
+        
+        // Create 2-dimension table, and filled with zero
+        let n = x.count
+        let m = y.count
+        var table = Array(repeating: Array(repeating: 0, count: m + 1), count: n + 1)
+    
+        // Iterate from top-left corner -> bottom-right corner
+        for i in 0...n {
+            for j in 0...m {
+                if i == 0 || j == 0 {
+                    table[i][j] = 0
+                }
+                else if x[i-1] == y[j-1] { // MATCH
+                    table[i][j] = table[i-1][j-1] + 1
+                }
+                else { // NOT MATCH
+                    table[i][j] = max(table[i-1][j], table[i][j-1])
+                }
+            }
+        }
+        
+        return table
+    }
+}
+```
 
 The code above is really simple af. Just following the table on your notebook, imagine how the i,j iterate over table, check case 1, case 2, move on to next cell.
 
@@ -348,11 +504,54 @@ It’s really tricky to run recursion from bottom corner to the top. It’s same
 
 Here is detail code. I tried to write simple as possible. Please notice **lcsFromMemorizationTable** is private method. Because I don’t want people modify it.
 
-//// Extension of Array // But we must ensure, each element must adopt with <Equatable> protocol -> We can make comparision extension Array where Element: Equatable { func LCS(_ other: [Element]) -> [Element] { // Build memorization table let table = MemorizationTable.buildTable(x: self, y: other) // Print LCS return self.lcsFromMemorizationTable(table, self, other, self.count, other.count) } fileprivate func lcsFromMemorizationTable(_ table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> [Element] { // Exit if i == 0 || j == 0 { return [] } // Recurvise else if x[i-1] == y[j-1] { // MATCH -> Get element return lcsFromMemorizationTable(table, x, y, i - 1, j - 1) + [x[i-1]] } else if table[i-1][j] > table[i][j-1] { // Top return lcsFromMemorizationTable(table, x, y, i - 1, j) } else { // Left return lcsFromMemorizationTable(table, x, y, i, j - 1) } } }
+```swift
+//// Extension of Array
+// But we must ensure, each element must adopt with <Equatable> protocol -> We can make comparision
+extension Array where Element: Equatable {
+    
+    func LCS(_ other: [Element]) -> [Element] {
+        
+        // Build memorization table
+        let table = MemorizationTable.buildTable(x: self, y: other)
+        
+        // Print LCS
+        return self.lcsFromMemorizationTable(table, self, other, self.count, other.count)
+    }
+    
+    fileprivate func lcsFromMemorizationTable(_ table: [[Int]], _ x: [Element], _ y: [Element], _ i: Int, _ j: Int) -> [Element] {
+        
+        // Exit
+        if i == 0 || j == 0 {
+            return []
+        }
+        
+        // Recurvise 
+        else if x[i-1] == y[j-1] { // MATCH -> Get element
+            return lcsFromMemorizationTable(table, x, y, i - 1, j - 1) + [x[i-1]]
+        }
+        else if table[i-1][j] > table[i][j-1] { // Top
+            return lcsFromMemorizationTable(table, x, y, i - 1, j)
+        }
+        else { // Left
+            return lcsFromMemorizationTable(table, x, y, i, j - 1)
+        }
+    }
+}
+```
 
 ### Test with string
 
-//////////////////////// ////// TEST with string // Convert [CharacterView] -> [String] let a = "acbaed".characters.map {String($0)} let b = "abcadfa".characters.map {String($0)} let lcs = a.LCS(b) // print(lcs) // ["a", "b", "a", "d"]
+```swift
+////////////////////////
+////// TEST with string
+ 
+// Convert [CharacterView] -> [String]
+let a = "acbaed".characters.map {String($0)}
+let b = "abcadfa".characters.map {String($0)}
+ 
+let lcs = a.LCS(b) //
+print(lcs) //  ["a", "b", "a", "d"]
+```
 
 Because LCS is working with Array<Element>, so we need to map [CharacterView] -> [String].
 
@@ -360,22 +559,48 @@ Because LCS is working with Array<Element>, so we need to map [CharacterView] ->
 
 **UserObj** is custom struct, or any kind of class. The different thing, we must adopt Equatable.
 
-struct UserObj: CustomStringConvertible { let name: String! var description: String { return "{\(self.name!)}" } } // Adopt Equatable extension UserObj: Equatable { public static func ==(lhs: UserObj, rhs: UserObj) -> Bool { return lhs.name == rhs.name } }
+```swift
+struct UserObj: CustomStringConvertible {
+    let name: String!
+ 
+    var description: String {
+        return "{\(self.name!)}"
+    }
+}
+ 
+// Adopt Equatable
+extension UserObj: Equatable {
+    public static func ==(lhs: UserObj, rhs: UserObj) -> Bool {
+        return lhs.name == rhs.name
+    }
+}
+```
 
 Don’t forget to adopt <Equatable> protocol. If you don’t do this. Swift can’t understand how to make a comparison between **UserObj.**
 
 Actually, even if you won’t do it on purpose, XCode will shot you an error intermediately, at build-time ❌. It’s one reason why I really love Swift – type safe language 🤗
 
-let localUsers = [UserObj(name: "Nghia Tran"), UserObj(name: "nghiatran.me"), UserObj(name: "SaiGon"), UserObj(name: "Algorithm")] let remoteUsers = [UserObj(name: "Kamakura"), UserObj(name: "Nghia Tran"), UserObj(name: "Algorithm"), UserObj(name: "SaiGon"), UserObj(name: "Somewhere")] let lcsUser = localUsers.LCS(remoteUsers) print(lcsUser) // [{Nghia Tran}, {Algorithm}]
-
-Swift Playground [su_button url=”https://github.com/NghiaTranUIT/LCS-Swift/blob/master/LCS-Dynamic-Programming-Part-1.playground/Contents.swift” target=”blank” style=”flat” size=”6″ icon=”icon: github-alt”]LCS – Dynamic Programming[/su_button]
-
+```swift
+let localUsers = [UserObj(name: "Nghia Tran"),
+                  UserObj(name: "nghiatran.me"),
+                  UserObj(name: "SaiGon"),
+                  UserObj(name: "Algorithm")]
+let remoteUsers = [UserObj(name: "Kamakura"),
+                   UserObj(name: "Nghia Tran"),
+                   UserObj(name: "Algorithm"),
+                   UserObj(name: "SaiGon"),
+                   UserObj(name: "Somewhere")]
+ 
+let lcsUser = localUsers.LCS(remoteUsers)
+print(lcsUser) // [{Nghia Tran}, {Algorithm}]
+```
+[Swift playground on github](”https://github.com/NghiaTranUIT/LCS-Swift/blob/master/LCS-Dynamic-Programming-Part-1.playground/Contents.swift)
 
 ## 4. Where to go from here ?
 
 You can download full source here
 
-[su_button url=”https://github.com/NghiaTranUIT/LCS-Swift” target=”blank” style=”flat” size=”6″ icon=”icon: github-alt”]LCS-Swift[/su_button]
+[Github](https://github.com/NghiaTranUIT/LCS-Swift)
 
 In this blog, we’ve learn how LCS algorithm actually works, how we can visualize it step by step, and how we implement LCS for generic Array in Swift too 😎
 
