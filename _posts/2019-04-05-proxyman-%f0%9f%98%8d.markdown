@@ -35,6 +35,6 @@ Download at Proxyman’s landing page ([https://proxyman.app](https://proxyman.a
 
 If you have any questions or just found a bug 🐞, give me a shot at [https://github.com/ProxymanApp/Proxyman](https://github.com/ProxymanApp/Proxyman)
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2019/04/main.png?resize=850%2C549&ssl=1)
+![](https://raw.githubusercontent.com/ProxymanApp/Proxyman/master/screenshots/proxyman_1.3.2_darkmode.png)
 
 

@@ -6,7 +6,7 @@ date: '2017-02-28 16:41:55'
 ---
 
 
-![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/02/background.png?w=100%25)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/background.png?w=100%25)
 
 I would like to announce my pet project which I’m currently working on 🤗
 

@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Diff in iOS [Part 2]
-image: https://nghiatran.me/wp-content/uploads/2017/02/igor-ovsyannykov-165874-e1487608521256.jpg
 date: '2017-03-04 10:52:22'
 ---
 
@@ -16,7 +15,7 @@ Before diving, we should try a real problem I ensure everybody will encounter if
 
 Let imagine, we have an app, same philosophy with Instagram. We have Feed screen, where we can see all post of your friends, your following.
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/03/diff_screenshot_app-169x300.jpg?resize=235%2C417)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/diff_screenshot_app-169x300.jpg?resize=235%2C417)
 
 On the top-right of navigation bar. We have pull-to-refresh button. Whenever you tap it. It will get new data from server, then filling data into UITableView.
 
@@ -108,7 +107,7 @@ We will traceback from right-bottom corner to left-top corner.
 
 - If A[i] == B[j] ->It means, A[i] is part of LCS. Then we move diagonal by i–, j–
 
-![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_9-300x261.png?resize=386%2C336)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_9-300x261.png?resize=386%2C336)
 
 **T** from string A convert to **T** from string B -> There is no difference, we just reload it.
 
@@ -126,7 +125,7 @@ As you can see, G != X. It means, G needs to be removed from A.
 
 let delete = DiffTransform.delete(i-1, A[i-1])
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_11-300x280.png?resize=346%2C323)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_11-300x280.png?resize=346%2C323)
 
 F != X. It means, X need to be added.
 
@@ -142,7 +141,7 @@ if i == 0 { // Insert at j-1 let insert = DiffTransform.insert(j-1, B[j-1]) } el
 
 By following 4 cases, we can determine when transform is applied.
 
-![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/02/lcs-part-2-1-300x195.png?resize=465%2C302)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/lcs-part-2-1-300x195.png?resize=465%2C302)
 
 Here is final instruction.
 
@@ -206,7 +205,7 @@ Using DiffCaculator is really simple.
 
 For demonstration, I write a simple app with smallDataSource (10 rows) and reload with large DataSource (20 rows) (simulate it’s from API).
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/03/diff_app-169x300.jpg?resize=293%2C521)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/diff_app-169x300.jpg?resize=293%2C521)
 
 On my purpose, the size of cells are dynamic, and collectionView inside each cell and the quality of images are high. Because we want to see the benchmark clearly. So make it’s more complex.
 
@@ -218,7 +217,7 @@ On this benchmark, I will test on my **iPhone 5**, gain accurate results, it wil
 
 By calling tableView.reloadData() is naive solution we could do. As you can see clearly, the first peak intends for the first time we reload and fill data into UITableView.
 
-![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/03/diff_benchmark_reload_2-267x300.jpg?resize=330%2C371)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/diff_benchmark_reload_2-267x300.jpg?resize=330%2C371)
 
 Noticeable, the second peak really impacts our performance. It costs **47%**. Because the table view must calculate the dynamic size on runtime, get minimum size which matched cell’s constraints, it depends on length of comment string. And reload the collectionview built-in the cell.
 
@@ -256,7 +255,7 @@ It’s completely straight-forward. Just initialize self.diffCalculator and set 
 
 We only need 6 steps to transform. It’s optimization approach for now 🤗
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/03/diff_benchmark_small_data_source-270x300.jpg?resize=354%2C393)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/diff_benchmark_small_data_source-270x300.jpg?resize=354%2C393)
 
 The result doesn’t make us disappointed. From **47%**, we reduce to **21%**. Good point 💯
 
@@ -274,7 +273,7 @@ Everything has two sides, it’s unfair if we only mention the bright side. Does
 
 Let try on large set of data. The initial data has 100 item, and new data has 210 item, and do each step which same we did.
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/03/diff_benchmark_large_data_source-300x256.jpg?resize=446%2C381)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/diff_benchmark_large_data_source-300x256.jpg?resize=446%2C381)
 
 Wow, **56%** CPU for Diff. What’s wrong here 🤔. As big as data source’s length could be, the time for Diff increases significantly.
 

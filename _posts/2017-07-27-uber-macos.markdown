@@ -1,16 +1,12 @@
 ---
 layout: post
 title: Uber macOS
-image: https://nghiatran.me/wp-content/uploads/2017/07/atlas-green-1507.jpg
 date: '2017-07-27 17:12:51'
 ---
 
-
-![](https://github.com/NghiaTranUIT/nghiatranuit.github.io/blob/master/resources/2017/07/icon_uber.png)
-
 # Uber macOS
 
- 
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/07/icon_uber.png)
 
 Hello my fellows,
 
@@ -39,14 +35,10 @@ It often drives me nuts 😪.
 
 And now, it’s almost done : >
 
-
 ## Check it out
 
 ❤️ [Homepage](http://uber.megaton.xyz) &  [Github](https://github.com/NghiaTranUIT/Unofficial-Uber-macOS) 🤗
 
-
 ## Screenshots
 
-![](https://github.com/NghiaTranUIT/nghiatranuit.github.io/blob/master/resources/2017/07/uber_screenshot.jpg)
-
-
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/07/uber_screenshot.jpg)

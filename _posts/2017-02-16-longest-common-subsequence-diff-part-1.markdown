@@ -22,7 +22,7 @@ In another hand, diff is also useful to compare pair of images.
 
 - [Facebook iOS Snapshot Test](https://github.com/facebook/ios-snapshot-test-case) make diff by drawing both of layer/view and reference image, then compare each pair of pointer in memory with the C function `memcmp(). `This make it extremely quick: from 0.013 to 0.086 seconds for fullscreen iPad on Macbook Air ([reference](https://www.objc.io/issues/15-testing/snapshot-testing/))
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/02/snapshots-reference-59b0b96b-300x162.png?resize=754%2C407)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/snapshots-reference-59b0b96b-300x162.png?resize=754%2C407)
 
 - [IGListKit](https://github.com/Instagram/IGListKit) is amazing open-source, built from Instagram Engineering team. According from their blog, IGListKit still use improved Diff (Paul Heckel’s algorithm) to calculate and perform insert/move/reload/delete without crashed with **linear time BigO(n), **it’s really increadible result.
 
@@ -61,7 +61,7 @@ LCS of “ABCDEF” and “ATDEXF” is ADEF, length = 4
 
 LCS of “ABC” and “AXYZC” is AC, length = 2
 
-![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/02/Longest-Common-Subsequence-example-300x94.jpg?resize=517%2C162)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/Longest-Common-Subsequence-example-300x94.jpg?resize=517%2C162)
 
 or A = “acbaed”, B = “abcadf” => LCS is “acad”, length = 4
 
@@ -167,7 +167,7 @@ if A.length() == 0 || B.length() == 0 return 0
 
 Imagination is really hard, so I will draw a tree to see what’s behind the scene.
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_13-300x117.png?resize=670%2C261)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_13-300x117.png?resize=670%2C261)
 
 ^ As you can see, there are few sub-problems has been solved many times. Time complexity is O(2<sup>n</sup>) in worse case when all character of X and Y are mismatch. It will be [exponential](https://en.wikipedia.org/wiki/Exponential_growth) by time.
 
@@ -199,7 +199,7 @@ A = “ADFGT” and B = “AFOXT”, and m is A.length(), n = B.length()
 
 Create two-dimension LCS = [m + 1][n + 1], fill with zero if i == 0 || j == 0
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_1-300x264.png?resize=464%2C408)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_1-300x264.png?resize=464%2C408)
 
 The reason why we fill the zero, because the empty string “” maybe is LCS as well.
 
@@ -209,13 +209,13 @@ Following two equation we summarized before, but this time, we don’t use recu
 
 Here is the visualize of them
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_2-266x300.png?resize=264%2C297)![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_4-300x173.png?resize=482%2C278)
+![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_2-266x300.png?resize=264%2C297)![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_4.png?resize=482%2C278)
 
 Simple af right?  😉
 
 We start to iterate over table with i = 1, and j = 1. We have A[i – 1] == “A”, B[j – 1] == “A” => It matches, so we do Case 1
 
-![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_5-300x251.png?resize=408%2C341)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_5-300x251.png?resize=408%2C341)
 
 => LCS[1][1] = 1 + LCS[0][0] = 1
 
@@ -249,7 +249,7 @@ To print LCS in memorization table is tricky. Because we should traceback the 
 
 - if A[i] == B[j] => It means, this element must be a part of LCS, so we print it, we will go to diagonal (means last char­ac­ter of both string has matched, so we reduce the length of both the strings by 1, so we move diag­o­nally)
 
-![](https://i0.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_9-300x261.png?resize=400%2C348)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_9-300x261.png?resize=400%2C348)
 
 - if A[i] != B[j], we have two sub-case here. Please check my code
 
@@ -257,7 +257,7 @@ LCS[i][j] = Max(LCS[i - 1][j], LCS[i][j - 1]); if (LCS[i][j] == LCS[i - 1][j]) {
 
 Here is visualize
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_10-300x205.png?resize=476%2C325)![](https://i2.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_11-300x280.png?resize=343%2C320)
+![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/02/table_10-300x205.png?resize=476%2C325)![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_11-300x280.png?resize=343%2C320)
 
 Keep traceback-ing to the top of memorization table 🤗. We will have somethings like below. Please notice, the Red Cell is the character we need to store somewhere, because it’s part of LCS.
 
