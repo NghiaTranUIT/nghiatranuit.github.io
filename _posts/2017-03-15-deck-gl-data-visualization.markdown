@@ -167,7 +167,7 @@ We have project structure here.
 
 Define constants, such as MapBoxAccessToken, data source name.
 
-```
+```js
 export const MapMode = {
   NONE:             'NONE',
   TREES:            'TREES',
@@ -189,7 +189,7 @@ export const TAXI_TRIP_DATA = './example/data/taxi-trip.json'
 
 #### INITIAL_STATE
 
-```
+```js
 const INITIAL_STATE = {
   mapViewState: {
     latitude: NY_LOCATION.latitude,
@@ -213,7 +213,7 @@ In addition, flightArcs, airports, tress, text and mapMode are main variables wh
 #### render()
 
 Navigate to bottom of main.js, you will see the render function.
-```
+```js
 render() {
   const { flightArcs, trees, mapMode, airports } = this.props
   const layerInfoProps = {
@@ -241,7 +241,7 @@ render() {
 render() is simply render the map as well as MapSelection and LayerInfo.
 
 #### To be implemented
-```
+```js
 _renderMap() {
   // Implement here
   return null
@@ -250,7 +250,7 @@ _renderMap() {
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_19.jpg)
 
 Here are 4 files we need to write real code. Please open each file, and look at temporary functions which I prepared for you.
-```
+```js
 /* Flight layer */
 export function _renderFlightOverlay(param) {
   // Implement here
@@ -313,7 +313,7 @@ Maybe take a second to mull that over. By understanding the data structure, we c
 ### 4.3 Mapbox
 
 The first goal we should achieve is figured out the way to present the map. According to my mention before, we use MapBox through this tutorial. Please navigate to **_renderMap()** in main.js, and implement below code
-```
+```js
 _renderMap() {
   const { mapViewState, mapMode } = this.props
   const { width, height } = this.state
@@ -334,7 +334,7 @@ _renderMap() {
 },
 ```
 It’s really straight-forward, we pass width, height, mapStyle, and mapViewState into **<MapboxGLMap>**. You can get further info at [mapbox’s documentations](https://www.mapbox.com/mapbox-gl-js/api/). The important point is isActiveOverlay. It will render the VisualizationOverlay if we choice any mode from MapSelection.
-```
+```js
 _renderVisualizationOverlay() {
   const { flightArcs, airports, mapMode, trees } = this.props
  
@@ -364,7 +364,7 @@ GHT && _renderFlightOverlay(param) } { mapMode === MapMode.TAXI && _renderTaxiOv
 I wrote it for you. It automatic switches and render individually overlay depend on mapMode we’re selecting.
 
 **_handleViewportChanged** will be triggered whenever the viewport changed, and update the viewState as well as rendering the overlay again. If we don’t re-render overlay layer with new state of map, the layers are still same old state. It’s incorrect behavior.
-```
+```js
 _handleViewportChanged(mapViewState) {
   if (mapViewState.pitch > 60) {
     mapViewState.pitch = 60
@@ -383,7 +383,7 @@ Feels free to spent 5 mins for experiment [Mapbox’s map editor](https://www.ma
 ### 4.4 Visualize trees in New York
 
 #### Parsing tree_new_york.csv
-```
+```js
 _loadData() {
   
   // Load Tree
@@ -391,7 +391,7 @@ _loadData() {
 },
 ```
 _loadCsvFile is helper func I wrote for you. It reads csv file and parsing into array. Then dispatching **loadTrees** action to ReduxStore
-```
+```js
 case 'LOAD_TREES': {
     let trees = action.data.map((item)=>{
       const lat = item.latitude
@@ -410,7 +410,7 @@ The purpose of our tutorial is representing the distribution of tree. So we igno
 ScreenGridLayer is built-in Deck.gl. It’s similar with Heatmap. The ScreenGridLayer takes in an array of latitude and longitude coordinate points, aggregates them into histogram bins and renders as a grid.
 
 Please navigate to **tree_screengrid_overlay.js** in **overlay** folder.
-```
+```js
 export function _renderTreesOverlay(param) {
     const { mapViewState, trees } = param.props
     const { width, height } = param.state
@@ -429,7 +429,7 @@ export function _renderTreesOverlay(param) {
 }
 ```
 It’s perfect time to implement **_renderTreesOverlay()** func. Initialize DeckGL with specific width/height. The layer’s parameter is passed from **_renderTreeLayer()**. Be care here. We return ScreenGridLayer associate with trees model.
-```
+```js
 function _renderTreeLayer(props) {
   const { trees } = props
   return [
@@ -448,7 +448,7 @@ function _renderTreeLayer(props) {
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_12.jpg)
 
 Run on terminal.
-```
+```bash
 yarn start
 ```
 The result works like a charm. Despite 683.788 trees, Deck.gl still handles perfectly, around 40-60 FPS.
@@ -470,7 +470,7 @@ ScreenGirdLayer is perfect choose if you would like to visualize the distributio
 It’s extremely useful to present the large data over the world. There are many different [color schemes](https://en.wikipedia.org/wiki/Color_scheme "Color scheme") that can be used to illustrate the heatmap, with perceptual advantages and disadvantages for each.
 
 It’s time to bring heatmap. Come back at _renderTreesHeatMapOverlay in **tree_heatmap_overlay.js** and put it down.
-```
+```js
 export function _renderTreesHeatMapOverlay(param) {
     const { mapViewState, trees } = param.props
     const { width, height } = param.state
@@ -490,7 +490,7 @@ export function _renderTreesHeatMapOverlay(param) {
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_16.jpg)
 
 I admit react-map-gl-heat overlay handled performance for 700.00 is worse.
-```
+```js
 gradientColors={Immutable.List(['blue', 'red'])}
 ```
 React-map-gl-heat also provides gradientColors, you can customize your look easier. [ColorBrewer](http://colorbrewer2.org/#type=sequential&scheme=OrRd&n=3) offer GUI to pick color-scheme.
@@ -506,7 +506,7 @@ In section 4, I mention two of layers which built-in Deck.gl. They also have Ar
 It’s time for the exciting part. We’re going to extend deck.gl’s Layer, customize it for representing Flight Route. Because of deck.gl don’t offer FlightLayer, so the one way is to implement it by our hand.
 
 We’re dealing with GLSL shader, please confirmed you’re installed **glslify** correctly. If now, please run below code.
-```
+```bash
 npm install --save glslify
 ```
 ### 5.2 Extend deck.gl’s Layer.
@@ -526,7 +526,7 @@ So the FlightLayer takes 3 parameters: **sourcePosition**, **targetPosition** as
 Before visualizing, we need to process the flight data to fit with our requirement.
 
 Load flight-data.csv, airport.csv
-```
+```js
 // Load Flight Data
 this._loadCsvFile(AIRPORT_DATA, (data)=>{
   this.props.dispatch(loadAirport(data))
@@ -534,7 +534,7 @@ this._loadCsvFile(AIRPORT_DATA, (data)=>{
 });
 ```
 in reducer
-```
+```js
 case 'LOAD_FLIGHT_POINT': {
   const flightArcs = action.points.map((item)=>{
     const originalAirport = item.ORIGIN_AIRPORT
@@ -581,7 +581,7 @@ Fully documentation [here](https://uber.github.io/deck.gl/#/documentation/creati
 Please navigate to** ../scr/layers/core/flight-data/flight-data.js. **I prepared all for saving time 🤗
 
 in flight-data.js
-```
+```js
 updateState({props, changeFlags: {dataChanged}}) {
   // Implement here
 }
@@ -624,7 +624,7 @@ getShaders() {
 All we need are here.
 
 #### Create gl model
-```
+```js
 _createModel(gl) {
   let positions = [];
   const NUM_SEGMENTS = 50;
@@ -646,13 +646,13 @@ _createModel(gl) {
 **NUM_SEGMENTS** is a number of small segment we draw parabola. The reason is, In OpenGL world, we can’t draw arc line, we need to draw each segment and line it together. As more as **NUM_SEGMENTS** is, the flight route is more smoothly.
 
 Finally, we create Model and Geometry internally, **GL.LINE_STIP** and position as input agreement.
-```
+```js
 positions = [...positions, i, i, i];
 ```
 What’s it? It’s placeholder array for representing index of segment. We passed <i> 3 times because we store vec3. It’s using in **vertex.glsl** to determine which index of segments 👍
 
 Don’t forget to take a look at **this.getShader()**. I wrote for you. It’s simply to read shader files in same directory.
-```
+```js
 getShaders() {
   return {
     vs: readFileSync(join(__dirname, './flight-layer-vertex.glsl'), 'utf8'),
@@ -672,7 +672,7 @@ We defined
 - instanceSourceColors, instanceTargetColors is **[vector4]** as r,g,b,a and unsigned_byte.
 
 The complete code is below.
-```
+```js
 initializeState() {
   const {gl} = this.context;
   this.setState({model: this._createModel(gl)});
@@ -697,7 +697,7 @@ initializeState() {
 #### Calculate position vec3
 
 It’s time for implementing helper function to calculate source/target position and color as well.
-```
+```js
 calculateInstanceSourcePositions(attribute) {
   const {data, getSourcePosition, getTargetPosition} = this.props;
   const {value, size} = attribute;
@@ -725,7 +725,7 @@ calculateInstanceTargetPositions(attribute) {
 }
 ```
 It’s not easy to understand if you’re not familiar WebGL or OpenGL in general. The main idea is to create array for each attribute (in vertex shader file)
-```
+```js
 const sourcePosition = getSourcePosition(object);
 value[i + 0] = sourcePosition[0];
 value[i + 1] = sourcePosition[1];
@@ -737,7 +737,7 @@ We get source position. get longitude and latitude which stand for sourcePositi
 It’s hacky solution because we can’t pass our object from javascript directly into vertex.glsl. The common approach is using array to pass long/lat indirectly and processing those data later. Actually, we could pass struct, but at this time, I won’t mention it.
 
 #### Calculate colors vec4
-```
+```js
 calculateInstanceSourceColors(attribute) {
   const {data, getSourceColor} = this.props;
   const {value, size} = attribute;
@@ -769,7 +769,7 @@ calculateInstanceTargetColors(attribute) {
 We do same philosophy with color as well.
 
 #### Layer.draw()
-```
+```js
 draw({uniforms}) {
   const {gl} = this.context;
   const {trailLength, currentTime, timestamp} = this.props;
@@ -790,7 +790,7 @@ If you don’t have basic knowledge about GLSL, feels free to skip this section.
 GLSLis a high-level shading language with a syntax based on the C programming language. Give developers more direct control of the graphics pipeline without having to use ARB assembly language or hardware-specific languages.
 
 #### flight-layer-vertex.glsl
-```
+```js
 #define SHADER_NAME flight-layer-vertex-shader
  
 const float N = 49.0;
@@ -879,7 +879,7 @@ We have backup plan to implement the width line, by drawing a rectangle with hei
 #### flight-layer-fragment.glsl
 
 After finished vertex.glsh, we should move to fragment. The fragment is essential file, the main purpose is handling all color mapping for each vertex.
-```
+```js
 #define SHADER_NAME flight-layer-fragment-shader
  
 #ifdef GL_ES
@@ -905,7 +905,7 @@ Look cool right? 😍
 #### Tween timer
 
 If you try running example at this time, you only see the fully parabola over the map. Now we’re adding timer to achieve animation. Navigate to startTweenTimer() in main.js
-```
+```js
 startTweenTimer() {
   this._tween = new TWEEN.Tween({time: 0})
         .to({time: 3600}, 120000)
@@ -943,7 +943,7 @@ It triggers tweenTimer automatically whenever we select new mapMode. I also have
 #### One more thing
 
 Notify attributeManager in flight-layer.js to invalidate all vertex, and re-render with new currentTime attribute.
-```
+```js
 updateState({props, changeFlags: {dataChanged}}) {
    if (dataChanged) {
      this.state.attributeManager.invalidateAll();
@@ -956,9 +956,11 @@ updateState({props, changeFlags: {dataChanged}}) {
 ![](https://i0.wp.com/img.memesuper.com/21b10a8a10c5427cec63e3ed65d9d77e_leonardo-dicaprio-cheers-meme-memes-on-success.jpeg)
 
 Time for going back to terminal and type holy spell.
-
-// To make sure you've installed packages correctly yarn install yarn start
-
+```bash
+# To make sure you've installed packages correctly 
+yarn install 
+yarn start
+```
 [![](https://img.youtube.com/vi/kgcJ0rftIUA”/0.jpg)](https://www.youtube.com/watch?v=kgcJ0rftIUA”)
 
 Feels free to switch between each map mode. I belive you will be impressed what we’ve done 💯
