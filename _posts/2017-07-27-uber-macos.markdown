@@ -6,8 +6,7 @@ date: '2017-07-27 17:12:51'
 ---
 
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/07/icon_uber.png?resize=256%2C256&ssl=1)
-
+![](https://github.com/NghiaTranUIT/nghiatranuit.github.io/blob/master/resources/2017/07/icon_uber.png)
 
 # Uber macOS
 
@@ -48,6 +47,6 @@ And now, it’s almost done : >
 
 ## Screenshots
 
-![](https://i1.wp.com/nghiatran.me/wp-content/uploads/2017/07/uber_screenshot.jpg?resize=821%2C514&ssl=1)
+![](https://github.com/NghiaTranUIT/nghiatranuit.github.io/blob/master/resources/2017/07/uber_screenshot.jpg)
 
 

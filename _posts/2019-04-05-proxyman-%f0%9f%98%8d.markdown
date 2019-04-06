@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Proxyman \U0001F60D"
-image: https://nghiatran.me/wp-content/uploads/2019/04/humphrey-muleba-1468522-unsplash.jpg
 date: '2019-04-05 16:21:31'
 tags:
 - charles
@@ -11,13 +10,11 @@ tags:
 - proxying
 ---
 
-
 Hey guys,
 
 I’m so excited to introduce you Proxyman ([https://proxyman.app](https://proxyman.app)), a modern and intuitive HTTP Proxy app for macOS ♥️
 
 Proxyman is still my best side project I’ve worked on ⚡️
-
 
 ## Features
 
@@ -33,7 +30,6 @@ Proxyman is still my best side project I’ve worked on ⚡️
 ## Download
 
 Download at Proxyman’s landing page ([https://proxyman.app](https://proxyman.app))
-
 
 ## Github
 
