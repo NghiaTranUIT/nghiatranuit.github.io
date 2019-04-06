@@ -1,0 +1,66 @@
+
+---Upload files---
+Customizer file was not uploaded. Error: File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini or by post_max_size being defined as smaller than upload_max_filesize in php.ini.
+
+---Upload files---
+The import files were successfully uploaded!
+Initial max execution time = 30
+Files info:
+Site URL = http://nghiatran.me
+Data file = /home/nghiatran/web/nghiatran.me/public_html/wp-content/uploads/2016/11/Demo-Content.xml
+Widget file = /home/nghiatran/web/nghiatran.me/public_html/wp-content/uploads/2016/11/widgets.wie
+Customizer file = not defined!
+
+------
+Completed AJAX call number: 1
+[WARNING] Failed to import portfolio-category Branding
+[WARNING] Failed to import portfolio-category Digital Art
+[WARNING] Failed to import portfolio-category Furniture
+[WARNING] Failed to import portfolio-category Logo
+[WARNING] Failed to import portfolio-category People
+[WARNING] Failed to import portfolio-category Photography
+[WARNING] Failed to import portfolio-category Print
+[WARNING] Failed to import portfolio-category Website
+
+
+---Importing content---
+[WARNING] Failed to import portfolio-category Branding
+[WARNING] Failed to import portfolio-category Digital Art
+[WARNING] Failed to import portfolio-category Furniture
+[WARNING] Failed to import portfolio-category Logo
+[WARNING] Failed to import portfolio-category People
+[WARNING] Failed to import portfolio-category Photography
+[WARNING] Failed to import portfolio-category Print
+[WARNING] Failed to import portfolio-category Website
+[WARNING] Could not find the author for comment #11
+[WARNING] Could not find the author for comment #15
+
+Max execution time after content import = 300
+
+---Importing widgets---
+Blog Widgets : 
+
+null-instagram-feed - Instagram. - Site does not support widget
+Search - No Title - Imported
+Tag Cloud - Tags. - Imported
+Categories - No Title - Imported
+Recent Posts - Latest Posts. - Imported
+
+Footer Widgets : 
+
+null-instagram-feed - Shots. - Site does not support widget
+rotatingtweets_widget - Tweets. - Site does not support widget
+
+Top Menu Widgets : 
+
+rotatingtweets_widget - Latest Tweets. - Site does not support widget
+null-instagram-feed - Instagram. - Site does not support widget
+
+Sidebar Menu Widgets : 
+
+Search - No Title - Imported
+null-instagram-feed - Instagram. - Site does not support widget
+Tag Cloud - Tags. - Imported
+Recent Posts - Recent Posts. - Imported
+
+
