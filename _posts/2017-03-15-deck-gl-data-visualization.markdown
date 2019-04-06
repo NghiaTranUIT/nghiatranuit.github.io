@@ -167,11 +167,44 @@ We have project structure here.
 
 Define constants, such as MapBoxAccessToken, data source name.
 
-export const MapMode = { NONE: 'NONE', TREES: 'TREES', TREES_HEATMAP: 'TREES_HEATMAP', FLIGHT: 'FLIGHT', TAXI: 'TAXI' } export const MAPBOX_ACCESS_TOKEN = '<insert-your-mapbox-public-token>' export const FLIGHT_DATA = './example/data/flight-data.csv' export const AIRPORT_DATA = './example/data/airports.csv' export const TREE_DATA = './example/data/tree_census.csv' export const TAXI_TRIP_DATA = './example/data/taxi-trip.json'
+```
+export const MapMode = {
+  NONE:             'NONE',
+  TREES:            'TREES',
+  TREES_HEATMAP:    'TREES_HEATMAP',
+  FLIGHT:           'FLIGHT',
+  TAXI:             'TAXI'
+}
+ 
+export const MAPBOX_ACCESS_TOKEN = '<insert-your-mapbox-public-token>'
+ 
+export const FLIGHT_DATA = './example/data/flight-data.csv'
+ 
+export const AIRPORT_DATA = './example/data/airports.csv'
+ 
+export const TREE_DATA = './example/data/tree_census.csv'
+ 
+export const TAXI_TRIP_DATA = './example/data/taxi-trip.json'
+```
 
 #### INITIAL_STATE
 
-const INITIAL_STATE = { mapViewState: { latitude: NY_LOCATION.latitude, longitude: NY_LOCATION.longitude, zoom: 11.5, pitch: 0, bearing: 0 }, flightArcs: null, airports: null, trees: null, taxi: null, mapMode: MapMode.NONE, };
+```
+const INITIAL_STATE = {
+  mapViewState: {
+    latitude: NY_LOCATION.latitude,
+    longitude: NY_LOCATION.longitude,
+    zoom: 11.5,
+    pitch: 0,
+    bearing: 0
+  },
+  flightArcs: null,
+  airports: null,
+  trees: null,
+  taxi: null,
+  mapMode: MapMode.NONE,
+};
+```
 
 INITIAL_STATE defines the main variables. It’s self-explanatory. When dealing with map, we usually encounter bunch of map context, such as Latitude, longitude, zoom, pitch, bearing. If you don’t know one of them. Please do short search on google. 😉
 
@@ -181,19 +214,68 @@ In addition, flightArcs, airports, tress, text and mapMode are main variables wh
 
 Navigate to bottom of main.js, you will see the render function.
 ```
-render() { const { flightArcs, trees, mapMode, airports } = this.props const layerInfoProps = { numberFlights: this._getLength(flightArcs), numberTrees: this._getLength(trees), numberAirport: this._getLength(airports), mode: mapMode, } const mapSelectionProps = { mapMode: this.props.mapMode, selectModeFunc: this._handleSelectMode, stopTimerFunc: this._handleStopTimer, } return ( <div> { this._renderMap() } <div className='overlay-contol-container'> <MapSelection {...mapSelectionProps}/> <LayerInfo {...layerInfoProps}/> </div> </div> ) },
+render() {
+  const { flightArcs, trees, mapMode, airports } = this.props
+  const layerInfoProps = {
+    numberFlights: this._getLength(flightArcs),
+    numberTrees: this._getLength(trees),
+    numberAirport: this._getLength(airports),
+    mode: mapMode,
+  }
+  const mapSelectionProps = {
+    mapMode: this.props.mapMode,
+    selectModeFunc: this._handleSelectMode,
+    stopTimerFunc: this._handleStopTimer,
+  }
+  return (
+    <div>
+      { this._renderMap() }
+      <div className='overlay-contol-container'>
+        <MapSelection {...mapSelectionProps}/>
+        <LayerInfo {...layerInfoProps}/>
+      </div>
+    </div>
+  )
+},
 ```
 render() is simply render the map as well as MapSelection and LayerInfo.
 
 #### To be implemented
 ```
-_renderMap() { // Implement here return null },
+_renderMap() {
+  // Implement here
+  return null
+},
 ```
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_19.jpg)
 
 Here are 4 files we need to write real code. Please open each file, and look at temporary functions which I prepared for you.
 ```
-/* Flight layer */ export function _renderFlightOverlay(param) { // Implement here return null } function _renderFlightLayer(param) { return [] } /* Tree layer */ export function _renderTreesHeatMapOverlay(param) { // Implement here return null } export function _renderTreesOverlay(param) { // Implement here return null } /* Tree heatmap layer */ function _renderTreeLayer(props) { return [] }
+/* Flight layer */
+export function _renderFlightOverlay(param) {
+  // Implement here
+  return null
+}
+ 
+function _renderFlightLayer(param) {
+  return []
+}
+ 
+/* Tree layer */
+export function _renderTreesHeatMapOverlay(param) {
+  // Implement here
+  return null
+}
+ 
+export function _renderTreesOverlay(param) {
+  // Implement here
+  return null
+}
+ 
+/* Tree heatmap layer */
+function _renderTreeLayer(props) {
+  return []
+}
 ```
 
 Don’t worry about this too much right now. I’ve covered all in next chapter 👍
@@ -204,7 +286,8 @@ Don’t worry about this too much right now. I’ve covered all in next chapter 
 
 You can download [tree_new_york.csv](https://www.kaggle.com/nycparks/tree-census)** **source from [Kaggle](https://www.kaggle.com/nycparks/tree-census).
 ```
-tree_id,block_id,borough,latitude,longitude,latin_name,common_name,location,status,health,tree_diameter,stump_diameter,root_stone,root_grate,root_other,trunk_wire,trunk_light,trunk_other,branch_light,branch_shoe,branch_other 277269,100002,Manhattan,40.70237278,-74.01143532,Metasequoia glyptostroboides,Dawn Redwood,On Curb,Alive,Fair,1,0,No,No,No,No,No,No,No,No,No
+tree_id,block_id,borough,latitude,longitude,latin_name,common_name,location,status,health,tree_diameter,stump_diameter,root_stone,root_grate,root_other,trunk_wire,trunk_light,trunk_other,branch_light,branch_shoe,branch_other
+277269,100002,Manhattan,40.70237278,-74.01143532,Metasequoia glyptostroboides,Dawn Redwood,On Curb,Alive,Fair,1,0,No,No,No,No,No,No,No,No,No
 ```
 The size is around 80Mb, contains ~700.000 records. The structure of **tree_new_york.csv** is really simple. But today, we should focus on **latitude** and **longitude**
 
@@ -212,9 +295,12 @@ The size is around 80Mb, contains ~700.000 records. The structure of **tree_new_
 
 Download [flight_record.csv](https://www.kaggle.com/usdot/flight-delays) and [airport.csv](https://www.kaggle.com/usdot/flight-delays) from Kaggle too. It’s largest file, around 192Mb zipped, 600Mb after extraction.
 ```
-IATA_CODE,AIRPORT,CITY,STATE,COUNTRY,LATITUDE,LONGITUDE ABE,Lehigh Valley International Airport,Allentown,PA,USA,40.65236,-75.44040
-
-YEAR,MONTH,DAY,DAY_OF_WEEK,AIRLINE,FLIGHT_NUMBER,TAIL_NUMBER,ORIGIN_AIRPORT,DESTINATION_AIRPORT,SCHEDULED_DEPARTURE,DEPARTURE_TIME,DEPARTURE_DELAY,TAXI_OUT,WHEELS_OFF,SCHEDULED_TIME,ELAPSED_TIME,AIR_TIME,DISTANCE,WHEELS_ON,TAXI_IN,SCHEDULED_ARRIVAL,ARRIVAL_TIME,ARRIVAL_DELAY,DIVERTED,CANCELLED,CANCELLATION_REASON,AIR_SYSTEM_DELAY,SECURITY_DELAY,AIRLINE_DELAY,LATE_AIRCRAFT_DELAY,WEATHER_DELAY 2015,1,1,4,AS,98,N407AS,ANC,SEA,0005,2354,-11,21,0015,205,194,169,1448,0404,4,0430,0408,-22,0,0,,,,,,
+IATA_CODE,AIRPORT,CITY,STATE,COUNTRY,LATITUDE,LONGITUDE
+ABE,Lehigh Valley International Airport,Allentown,PA,USA,40.65236,-75.44040
+```
+```
+YEAR,MONTH,DAY,DAY_OF_WEEK,AIRLINE,FLIGHT_NUMBER,TAIL_NUMBER,ORIGIN_AIRPORT,DESTINATION_AIRPORT,SCHEDULED_DEPARTURE,DEPARTURE_TIME,DEPARTURE_DELAY,TAXI_OUT,WHEELS_OFF,SCHEDULED_TIME,ELAPSED_TIME,AIR_TIME,DISTANCE,WHEELS_ON,TAXI_IN,SCHEDULED_ARRIVAL,ARRIVAL_TIME,ARRIVAL_DELAY,DIVERTED,CANCELLED,CANCELLATION_REASON,AIR_SYSTEM_DELAY,SECURITY_DELAY,AIRLINE_DELAY,LATE_AIRCRAFT_DELAY,WEATHER_DELAY
+2015,1,1,4,AS,98,N407AS,ANC,SEA,0005,2354,-11,21,0015,205,194,169,1448,0404,4,0430,0408,-22,0,0,,,,,,
 ```
 In flight_record.csv, they didn’t include lat/long. So we need to write helper code to map departure/arrival airport’s coordination.
 
@@ -228,17 +314,63 @@ Maybe take a second to mull that over. By understanding the data structure, we c
 
 The first goal we should achieve is figured out the way to present the map. According to my mention before, we use MapBox through this tutorial. Please navigate to **_renderMap()** in main.js, and implement below code
 ```
-_renderMap() { const { mapViewState, mapMode } = this.props const { width, height } = this.state const isActiveOverlay = mapMode !== MapMode.NONE return ( <MapboxGLMap mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN} width={width} height={height} mapStyle='mapbox://styles/mapbox/dark-v9' perspectiveEnabled { ...mapViewState } onChangeViewport={this._handleViewportChanged}> {isActiveOverlay && this._renderVisualizationOverlay()} <FPSStats isActive/> </MapboxGLMap> ); },
+_renderMap() {
+  const { mapViewState, mapMode } = this.props
+  const { width, height } = this.state
+  const isActiveOverlay = mapMode !== MapMode.NONE
+  return (
+    <MapboxGLMap
+      mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+      width={width}
+      height={height}
+      mapStyle='mapbox://styles/mapbox/dark-v9'
+      perspectiveEnabled
+      { ...mapViewState }
+      onChangeViewport={this._handleViewportChanged}>
+      {isActiveOverlay && this._renderVisualizationOverlay()}
+      <FPSStats isActive/>
+    </MapboxGLMap>
+  );
+},
 ```
 It’s really straight-forward, we pass width, height, mapStyle, and mapViewState into **<MapboxGLMap>**. You can get further info at [mapbox’s documentations](https://www.mapbox.com/mapbox-gl-js/api/). The important point is isActiveOverlay. It will render the VisualizationOverlay if we choice any mode from MapSelection.
 ```
-_renderVisualizationOverlay() { const { flightArcs, airports, mapMode, trees } = this.props // wait until data is ready before rendering if (flightArcs === null|| airports === null || trees === null) { return [] } const param = { props: this.props, state: this.state, onWebGLInitialized: this._onWebGLInitialized, effects: this._effects, } return ( <div> { mapMode === MapMode.TREES && _renderTreesOverlay(param) } { mapMode === MapMode.TREES_HEATMAP && _renderTreesHeatMapOverlay(param) } { mapMode === MapMode.FLIGHT && _renderFlightOverlay(param) } { mapMode === MapMode.TAXI && _renderTaxiOverlay(param) } </div> ) },
+_renderVisualizationOverlay() {
+  const { flightArcs, airports, mapMode, trees } = this.props
+ 
+  // wait until data is ready before rendering
+  if (flightArcs === null|| airports === null || trees === null) {
+    return []
+  }
+ 
+  const param = {
+    props: this.props,
+    state: this.state,
+    onWebGLInitialized: this._onWebGLInitialized,
+    effects: this._effects,
+  }
+ 
+  return (
+    <div>
+      { mapMode === MapMode.TREES && _renderTreesOverlay(param) }
+      { mapMode === MapMode.TREES_HEATMAP && _renderTreesHeatMapOverlay(param) }
+      { mapMode === MapMode.FLIGHT && _renderFlightOverlay(param) }
+      { mapMode === MapMode.TAXI && _renderTaxiOverlay(param) }
+    </div>
+  )
+},
+GHT && _renderFlightOverlay(param) } { mapMode === MapMode.TAXI && _renderTaxiOverlay(param) } </div> ) },
 ```
 I wrote it for you. It automatic switches and render individually overlay depend on mapMode we’re selecting.
 
 **_handleViewportChanged** will be triggered whenever the viewport changed, and update the viewState as well as rendering the overlay again. If we don’t re-render overlay layer with new state of map, the layers are still same old state. It’s incorrect behavior.
 ```
-_handleViewportChanged(mapViewState) { if (mapViewState.pitch > 60) { mapViewState.pitch = 60 } this.props.dispatch(updateMap(mapViewState)) },
+_handleViewportChanged(mapViewState) {
+  if (mapViewState.pitch > 60) {
+    mapViewState.pitch = 60
+  }
+  this.props.dispatch(updateMap(mapViewState))
+},
 ```
 #### Mapbox Public Token
 
@@ -252,11 +384,24 @@ Feels free to spent 5 mins for experiment [Mapbox’s map editor](https://www.ma
 
 #### Parsing tree_new_york.csv
 ```
-_loadData() { // Load Tree this._loadCsvFile(TREE_DATA, (data)=>{this.props.dispatch(loadTrees(data))}) },
-
+_loadData() {
+  
+  // Load Tree
+  this._loadCsvFile(TREE_DATA, (data)=>{this.props.dispatch(loadTrees(data))})
+},
+```
 _loadCsvFile is helper func I wrote for you. It reads csv file and parsing into array. Then dispatching **loadTrees** action to ReduxStore
-
-case 'LOAD_TREES': { let trees = action.data.map((item)=>{ const lat = item.latitude const long = item.longitude return { position: [Number(long), Number(lat)] } }) return {...state, trees} }
+```
+case 'LOAD_TREES': {
+    let trees = action.data.map((item)=>{
+      const lat = item.latitude
+      const long = item.longitude
+      return {
+        position: [Number(long), Number(lat)]
+      }
+    })
+    return {...state, trees}
+}
 ```
 The purpose of our tutorial is representing the distribution of tree. So we ignore unnecessary fields, we only care long/lat. It’s why I .map() to transform items into position object. Then returning the result into mainState. It’s not hard If you’re familiar with React+Redux.
 
@@ -266,20 +411,46 @@ ScreenGridLayer is built-in Deck.gl. It’s similar with Heatmap. The ScreenGri
 
 Please navigate to **tree_screengrid_overlay.js** in **overlay** folder.
 ```
-export function _renderTreesOverlay(param) { const { mapViewState, trees } = param.props const { width, height } = param.state return ( <DeckGL id="default-deckgl-overlay" width={width} height={height} debug {...mapViewState} onWebGLInitialized={param.onWebGLInitialized} layers={_renderTreeLayer(param.props)} effects={param.effects} /> ) }
+export function _renderTreesOverlay(param) {
+    const { mapViewState, trees } = param.props
+    const { width, height } = param.state
+    return (
+      <DeckGL
+        id="default-deckgl-overlay"
+        width={width}
+        height={height}
+        debug
+        {...mapViewState}
+        onWebGLInitialized={param.onWebGLInitialized}
+        layers={_renderTreeLayer(param.props)}
+        effects={param.effects}
+      />
+    )
+}
 ```
 It’s perfect time to implement **_renderTreesOverlay()** func. Initialize DeckGL with specific width/height. The layer’s parameter is passed from **_renderTreeLayer()**. Be care here. We return ScreenGridLayer associate with trees model.
 ```
-function _renderTreeLayer(props) { const { trees } = props return [ new ScreenGridLayer({ id: 'gird', data: trees, minColor: [0, 0, 0, 0], unitWidth: 10, unitHeight: 10, }) ]; }
+function _renderTreeLayer(props) {
+  const { trees } = props
+  return [
+    new ScreenGridLayer({
+      id: 'gird',
+      data: trees,
+      minColor: [0, 0, 0, 0],
+      unitWidth: 10,
+      unitHeight: 10,
+    })
+  ];
+}
 ```
 #### Results
 
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_12.jpg)
 
 Run on terminal.
-
+```
 yarn start
-
+```
 The result works like a charm. Despite 683.788 trees, Deck.gl still handles perfectly, around 40-60 FPS.
 
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_14.jpg)
@@ -300,16 +471,28 @@ It’s extremely useful to present the large data over the world. There are man
 
 It’s time to bring heatmap. Come back at _renderTreesHeatMapOverlay in **tree_heatmap_overlay.js** and put it down.
 ```
-export function _renderTreesHeatMapOverlay(param) { const { mapViewState, trees } = param.props const { width, height } = param.state return ( <HeatmapOverlay locations={trees} {...mapViewState} width={width} height={height} lngLatAccessor={(tree) => [tree['position'][0], tree['position'][1]]} /> ) }
+export function _renderTreesHeatMapOverlay(param) {
+    const { mapViewState, trees } = param.props
+    const { width, height } = param.state
+    return (
+      <HeatmapOverlay
+        locations={trees}
+        {...mapViewState}
+        width={width}
+        height={height}
+        lngLatAccessor={(tree) => [tree['position'][0], tree['position'][1]]}
+        />
+    )
+}
 ```
 **lngLatAccessor** : Data accessors can be provided if your data doesn’t fit the expected form`{longitude, latitude}`.
 
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_16.jpg)
 
 I admit react-map-gl-heat overlay handled performance for 700.00 is worse.
-
+```
 gradientColors={Immutable.List(['blue', 'red'])}
-
+```
 React-map-gl-heat also provides gradientColors, you can customize your look easier. [ColorBrewer](http://colorbrewer2.org/#type=sequential&scheme=OrRd&n=3) offer GUI to pick color-scheme.
 
 ###  4.6 Conclusion
@@ -344,11 +527,34 @@ Before visualizing, we need to process the flight data to fit with our requireme
 
 Load flight-data.csv, airport.csv
 ```
-// Load Flight Data this._loadCsvFile(AIRPORT_DATA, (data)=>{ this.props.dispatch(loadAirport(data)) this._loadCsvFile(FLIGHT_DATA, (data)=>{this.props.dispatch(loadFlightDataPoints(data))}) });
+// Load Flight Data
+this._loadCsvFile(AIRPORT_DATA, (data)=>{
+  this.props.dispatch(loadAirport(data))
+  this._loadCsvFile(FLIGHT_DATA, (data)=>{this.props.dispatch(loadFlightDataPoints(data))})
+});
 ```
 in reducer
 ```
-case 'LOAD_FLIGHT_POINT': { const flightArcs = action.points.map((item)=>{ const originalAirport = item.ORIGIN_AIRPORT const destinationAirport = item.DESTINATION_AIRPORT return { sourcePosition: state.airports[originalAirport], targetPosition: state.airports[destinationAirport], } }) return {...state, flightArcs} } case 'LOAD_AIRPORT': { let airports = {} action.airports.forEach((item, index)=>{ airports[item.IATA_CODE] = [Number(item.LONGITUDE), Number(item.LATITUDE)] }) return {...state, airports} }
+case 'LOAD_FLIGHT_POINT': {
+  const flightArcs = action.points.map((item)=>{
+    const originalAirport = item.ORIGIN_AIRPORT
+    const destinationAirport = item.DESTINATION_AIRPORT
+    return {
+      sourcePosition: state.airports[originalAirport],
+      targetPosition: state.airports[destinationAirport],
+    }
+  })
+  return {...state, flightArcs}
+}
+ 
+case 'LOAD_AIRPORT': {
+  let airports = {}
+  action.airports.forEach((item, index)=>{
+    airports[item.IATA_CODE] = [Number(item.LONGITUDE), Number(item.LATITUDE)]
+  })
+ 
+  return {...state, airports}
+}
 ```
 Please take a notice at **LOAD_AIRPORT** action, I convert airport array to hash-map. Because time complexity for searching key in generally is O(1). It’s really useful for **LOAD_FLIGHT_POINT** action, when mapping coordinate for original/destination airport.
 
@@ -376,13 +582,66 @@ Please navigate to** ../scr/layers/core/flight-data/flight-data.js. **I prepare
 
 in flight-data.js
 ```
-updateState({props, changeFlags: {dataChanged}}) { // Implement here } initializeState() { // Implement here } draw({uniforms}) { // Implement here } _createModel(gl) { // Implement here } calculateInstanceSourcePositions(attribute) { // Implement here } calculateInstanceTargetPositions(attribute) { // Implement here } calculateInstanceSourceColors(attribute) { // Implement here } calculateInstanceTargetColors(attribute) { // Implement here } getShaders() { return { vs: readFileSync(join(__dirname, './flight-layer-vertex.glsl'), 'utf8'), fs: readFileSync(join(__dirname, './flight-layer-fragment.glsl'), 'utf8') }; }
+updateState({props, changeFlags: {dataChanged}}) {
+  // Implement here
+}
+ 
+initializeState() {
+  // Implement here
+}
+ 
+draw({uniforms}) {
+  // Implement here
+}
+ 
+_createModel(gl) {
+  // Implement here
+}
+ 
+calculateInstanceSourcePositions(attribute) {
+  // Implement here
+}
+ 
+calculateInstanceTargetPositions(attribute) {
+  // Implement here
+}
+ 
+calculateInstanceSourceColors(attribute) {
+  // Implement here
+}
+ 
+calculateInstanceTargetColors(attribute) {
+  // Implement here
+}
+ 
+getShaders() {
+  return {
+    vs: readFileSync(join(__dirname, './flight-layer-vertex.glsl'), 'utf8'),
+    fs: readFileSync(join(__dirname, './flight-layer-fragment.glsl'), 'utf8')
+  };
+}
 ```
 All we need are here.
 
 #### Create gl model
 ```
-_createModel(gl) { let positions = []; const NUM_SEGMENTS = 50; for (let i = 0; i < NUM_SEGMENTS; i++) { positions = [...positions, i, i, i]; } return new Model({ gl, ...assembleShaders(gl, this.getShaders()), geometry: new Geometry({ drawMode: GL.LINE_STRIP, positions: new Float32Array(positions) }), isInstanced: true }); }
+_createModel(gl) {
+  let positions = [];
+  const NUM_SEGMENTS = 50;
+  for (let i = 0; i < NUM_SEGMENTS; i++) {
+    positions = [...positions, i, i, i];
+  }
+ 
+  return new Model({
+    gl,
+    ...assembleShaders(gl, this.getShaders()),
+    geometry: new Geometry({
+      drawMode: GL.LINE_STRIP,
+      positions: new Float32Array(positions)
+    }),
+    isInstanced: true
+  });
+}
 ```
 **NUM_SEGMENTS** is a number of small segment we draw parabola. The reason is, In OpenGL world, we can’t draw arc line, we need to draw each segment and line it together. As more as **NUM_SEGMENTS** is, the flight route is more smoothly.
 
@@ -394,7 +653,12 @@ What’s it? It’s placeholder array for representing index of segment. We pass
 
 Don’t forget to take a look at **this.getShader()**. I wrote for you. It’s simply to read shader files in same directory.
 ```
-getShaders() { return { vs: readFileSync(join(__dirname, './flight-layer-vertex.glsl'), 'utf8'), fs: readFileSync(join(__dirname, './flight-layer-fragment.glsl'), 'utf8') }; }
+getShaders() {
+  return {
+    vs: readFileSync(join(__dirname, './flight-layer-vertex.glsl'), 'utf8'),
+    fs: readFileSync(join(__dirname, './flight-layer-fragment.glsl'), 'utf8')
+  };
+}
 ```
 #### initializeState()
 
@@ -409,17 +673,64 @@ We defined
 
 The complete code is below.
 ```
-initializeState() { const {gl} = this.context; this.setState({model: this._createModel(gl)}); const {attributeManager} = this.state; attributeManager.addInstanced({ instanceSourcePositions: {size: 3, update: this.calculateInstanceSourcePositions}, instanceTargetPositions: {size: 3, update: this.calculateInstanceTargetPositions}, instanceSourceColors: { type: GL.UNSIGNED_BYTE, size: 4, update: this.calculateInstanceSourceColors }, instanceTargetColors: { type: GL.UNSIGNED_BYTE, size: 4, update: this.calculateInstanceTargetColors } }); }
+initializeState() {
+  const {gl} = this.context;
+  this.setState({model: this._createModel(gl)});
+ 
+  const {attributeManager} = this.state;
+  attributeManager.addInstanced({
+    instanceSourcePositions: {size: 3, update: this.calculateInstanceSourcePositions},
+    instanceTargetPositions: {size: 3, update: this.calculateInstanceTargetPositions},
+    instanceSourceColors: {
+      type: GL.UNSIGNED_BYTE,
+      size: 4,
+      update: this.calculateInstanceSourceColors
+    },
+    instanceTargetColors: {
+      type: GL.UNSIGNED_BYTE,
+      size: 4,
+      update: this.calculateInstanceTargetColors
+    }
+  });
+}
 ```
 #### Calculate position vec3
 
 It’s time for implementing helper function to calculate source/target position and color as well.
 ```
-calculateInstanceSourcePositions(attribute) { const {data, getSourcePosition, getTargetPosition} = this.props; const {value, size} = attribute; let i = 0; for (const object of data) { const sourcePosition = getSourcePosition(object); value[i + 0] = sourcePosition[0]; value[i + 1] = sourcePosition[1]; value[i + 2] = 0; i += size; } } calculateInstanceTargetPositions(attribute) { const {data, getSourcePosition, getTargetPosition} = this.props; const {value, size} = attribute; let i = 0; for (const object of data) { const targetPosition = getTargetPosition(object); value[i + 0] = targetPosition[0]; value[i + 1] = targetPosition[1]; value[i + 2] = 0; i += size; } }
+calculateInstanceSourcePositions(attribute) {
+  const {data, getSourcePosition, getTargetPosition} = this.props;
+  const {value, size} = attribute;
+  let i = 0;
+  for (const object of data) {
+    const sourcePosition = getSourcePosition(object);
+    value[i + 0] = sourcePosition[0];
+    value[i + 1] = sourcePosition[1];
+    value[i + 2] = 0;
+    i += size;
+  }
+}
+ 
+calculateInstanceTargetPositions(attribute) {
+  const {data, getSourcePosition, getTargetPosition} = this.props;
+  const {value, size} = attribute;
+  let i = 0;
+  for (const object of data) {
+    const targetPosition = getTargetPosition(object);
+    value[i + 0] = targetPosition[0];
+    value[i + 1] = targetPosition[1];
+    value[i + 2] = 0;
+    i += size;
+  }
+}
 ```
 It’s not easy to understand if you’re not familiar WebGL or OpenGL in general. The main idea is to create array for each attribute (in vertex shader file)
-
-const sourcePosition = getSourcePosition(object); value[i + 0] = sourcePosition[0]; value[i + 1] = sourcePosition[1]; value[i + 2] = 0;
+```
+const sourcePosition = getSourcePosition(object);
+value[i + 0] = sourcePosition[0];
+value[i + 1] = sourcePosition[1];
+value[i + 2] = 0;
+```
 
 We get source position. get longitude and latitude which stand for sourcePosition[0] and sourcePosition[1], then passing to value array. Please z = 0, because it’s on earth ground.
 
@@ -427,19 +738,52 @@ It’s hacky solution because we can’t pass our object from javascript directl
 
 #### Calculate colors vec4
 ```
-calculateInstanceSourceColors(attribute) { const {data, getSourceColor} = this.props; const {value, size} = attribute; let i = 0; for (const object of data) { const color = getSourceColor(object) || DEFAULT_COLOR; value[i + 0] = color[0]; value[i + 1] = color[1]; value[i + 2] = color[2]; value[i + 3] = isNaN(color[3]) ? DEFAULT_COLOR[3] : color[3]; i += size; } } calculateInstanceTargetColors(attribute) { const {data, getTargetColor} = this.props; const {value, size} = attribute; let i = 0; for (const object of data) { const color = getTargetColor(object) || DEFAULT_COLOR; value[i + 0] = color[0]; value[i + 1] = color[1]; value[i + 2] = color[2]; value[i + 3] = isNaN(color[3]) ? DEFAULT_COLOR[3] : color[3]; i += size; } }
+calculateInstanceSourceColors(attribute) {
+  const {data, getSourceColor} = this.props;
+  const {value, size} = attribute;
+  let i = 0;
+  for (const object of data) {
+    const color = getSourceColor(object) || DEFAULT_COLOR;
+    value[i + 0] = color[0];
+    value[i + 1] = color[1];
+    value[i + 2] = color[2];
+    value[i + 3] = isNaN(color[3]) ? DEFAULT_COLOR[3] : color[3];
+    i += size;
+  }
+}
+ 
+calculateInstanceTargetColors(attribute) {
+  const {data, getTargetColor} = this.props;
+  const {value, size} = attribute;
+  let i = 0;
+  for (const object of data) {
+    const color = getTargetColor(object) || DEFAULT_COLOR;
+    value[i + 0] = color[0];
+    value[i + 1] = color[1];
+    value[i + 2] = color[2];
+    value[i + 3] = isNaN(color[3]) ? DEFAULT_COLOR[3] : color[3];
+    i += size;
+  }
+}
 ```
 We do same philosophy with color as well.
 
 #### Layer.draw()
 ```
-draw({uniforms}) { const {gl} = this.context; const {trailLength, currentTime, timestamp} = this.props; console.log(currentTime); this.state.model.render(Object.assign({}, uniforms, { trailLength, currentTime, timestamp })); }
+draw({uniforms}) {
+  const {gl} = this.context;
+  const {trailLength, currentTime, timestamp} = this.props;
+  console.log(currentTime);
+  this.state.model.render(Object.assign({}, uniforms, {
+    trailLength,
+    currentTime,
+    timestamp
+  }));
+}
 ```
 Draw layer and passing our data uniform into shader file is self-explanatory. We also pass trailLength, currentTime, timestamp as uniform too. We will use it later, for animation 🤗
 
 ### 5.5 GLSL (OpenGL Shading Language)
-
-![](https://i0.wp.com/graytotebox.com/wp-content/uploads/2014/02/braceyourself.jpg)
 
 If you don’t have basic knowledge about GLSL, feels free to skip this section.
 
@@ -447,7 +791,68 @@ GLSLis a high-level shading language with a syntax based on the C programming la
 
 #### flight-layer-vertex.glsl
 ```
-#define SHADER_NAME flight-layer-vertex-shader const float N = 49.0; attribute vec3 positions; attribute vec4 instanceSourceColors; attribute vec4 instanceTargetColors; attribute vec3 instanceSourcePositions; attribute vec3 instanceTargetPositions; attribute vec3 instancePickingColors; uniform float opacity; uniform float renderPickingBuffer; uniform float currentTime; uniform float trailLength; uniform float timestamp; varying float vTime; varying vec4 vColor; float paraboloid(vec2 source, vec2 target, float ratio) { vec2 x = mix(source, target, ratio); vec2 center = mix(source, target, 0.5); float dSourceCenter = distance(source, center); float dXCenter = distance(x, center); return (dSourceCenter + dXCenter) * (dSourceCenter - dXCenter); } void main(void) { // 1 vec2 source = preproject(instanceSourcePositions.xy); vec2 target = preproject(instanceTargetPositions.xy); // 2 float segmentRatio = smoothstep(0.0, 1.0, positions.x / N); // 3 float vertex_height = paraboloid(source, target, segmentRatio); if (vertex_height < 0.0) vertex_height = 0.0; vec3 p = vec3( // xy: linear interpolation of source & target mix(source, target, segmentRatio), // z: paraboloid interpolate of source & target sqrt(vertex_height) ); // 4 // the magic de-flickering factor float _timestamp = (positions.x * 15.0) / 2000.0; vec4 shift = vec4(0., 0., mod(_timestamp, trailLength) * 1e-4, 0.); gl_Position = project(vec4(p, 1.0)) + shift; // Color vColor = mix(instanceSourceColors, instanceTargetColors, segmentRatio) / 255.; // 5 vTime = 1.0 - (currentTime - _timestamp) / trailLength; }
+#define SHADER_NAME flight-layer-vertex-shader
+ 
+const float N = 49.0;
+ 
+attribute vec3 positions;
+attribute vec4 instanceSourceColors;
+attribute vec4 instanceTargetColors;
+attribute vec3 instanceSourcePositions;
+attribute vec3 instanceTargetPositions;
+attribute vec3 instancePickingColors;
+ 
+uniform float opacity;
+uniform float renderPickingBuffer;
+uniform float currentTime;
+uniform float trailLength;
+uniform float timestamp;
+ 
+varying float vTime;
+varying vec4 vColor;
+ 
+ 
+float paraboloid(vec2 source, vec2 target, float ratio) {
+ 
+  vec2 x = mix(source, target, ratio);
+  vec2 center = mix(source, target, 0.5);
+ 
+  float dSourceCenter = distance(source, center);
+  float dXCenter = distance(x, center);
+  return (dSourceCenter + dXCenter) * (dSourceCenter - dXCenter);
+}
+ 
+void main(void) {
+ 
+  // 1
+  vec2 source = preproject(instanceSourcePositions.xy);
+  vec2 target = preproject(instanceTargetPositions.xy);
+  
+  // 2
+  float segmentRatio = smoothstep(0.0, 1.0, positions.x / N);
+ 
+  // 3
+  float vertex_height = paraboloid(source, target, segmentRatio);
+  if (vertex_height < 0.0) vertex_height = 0.0;
+  vec3 p = vec3(
+    // xy: linear interpolation of source & target
+    mix(source, target, segmentRatio),
+    // z: paraboloid interpolate of source & target
+    sqrt(vertex_height)
+  );
+ 
+  // 4
+  // the magic de-flickering factor
+  float _timestamp = (positions.x * 15.0) / 2000.0;
+  vec4 shift = vec4(0., 0., mod(_timestamp, trailLength) * 1e-4, 0.);
+  gl_Position = project(vec4(p, 1.0)) + shift;
+ 
+  // Color
+  vColor = mix(instanceSourceColors, instanceTargetColors, segmentRatio) / 255.;
+ 
+  // 5
+  vTime = 1.0 - (currentTime - _timestamp) / trailLength;
+}
 ```
 1. [preproject](https://uber.github.io/deck.gl/#/documentation/advanced-topics/coordinate-systems)**: **All positions must be passed through the preproject function (available both in JavaScript and GLSL) to convert non-linear web-mercator coordinates to linear Mercator “world” or “pixel” coordinates, that can be passed to the projection matrix. At this time, we convert long/lat coordinate to pixel in our webview.
 2. [smoothstep](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/smoothstep.xhtml) is built-in method in OpenGL. perform Hermite interpolation between two values. The segmentRatio depends on index of segment. So it’s perfect time to get value from **positions** we created before.
@@ -475,7 +880,21 @@ We have backup plan to implement the width line, by drawing a rectangle with hei
 
 After finished vertex.glsh, we should move to fragment. The fragment is essential file, the main purpose is handling all color mapping for each vertex.
 ```
-#define SHADER_NAME flight-layer-fragment-shader #ifdef GL_ES precision highp float; #endif varying float vTime; varying vec4 vColor; void main(void) { if (vTime > 1.0 || vTime < 0.0) { discard; } gl_FragColor = vec4(vColor.rgb, vColor.a * vTime); }
+#define SHADER_NAME flight-layer-fragment-shader
+ 
+#ifdef GL_ES
+precision highp float;
+#endif
+ 
+varying float vTime;
+varying vec4 vColor;
+ 
+void main(void) {
+  if (vTime > 1.0 || vTime < 0.0) {
+    discard;
+  }
+  gl_FragColor = vec4(vColor.rgb, vColor.a * vTime);
+}
 ```
 Please notice, vTime is passed from vertex.glsl. At this time, we will turn it by mutipling with color’s alpha.
 
@@ -487,11 +906,37 @@ Look cool right? 😍
 
 If you try running example at this time, you only see the fully parabola over the map. Now we’re adding timer to achieve animation. Navigate to startTweenTimer() in main.js
 ```
-startTweenTimer() { this._tween = new TWEEN.Tween({time: 0}) .to({time: 3600}, 120000) .onUpdate((data)=>{ this.setState({ time: data }) }) .repeat(Infinity).start() this.animate() }, animate(time) { window.requestAnimationFrame(this.animate) TWEEN.update(); },
+startTweenTimer() {
+  this._tween = new TWEEN.Tween({time: 0})
+        .to({time: 3600}, 120000)
+        .onUpdate((data)=>{
+          this.setState({
+            time: data
+          })
+        })
+        .repeat(Infinity).start()
+  this.animate()
+},
+ 
+animate(time) {
+  window.requestAnimationFrame(this.animate)
+  TWEEN.update();
+},
 ```
 then
 ```
-componentWillReceiveProps: function(nextProps) { const { mapMode } = this.props const { isStartedTimer } = this.state if ((nextProps.mapMode === MapMode.FLIGHT || nextProps.mapMode === MapMode.TAXI ) && nextProps.mapMode !== mapMode && isStartedTimer === false) { this.startTweenTimer() this.setState({ isStartedTimer: true }) } },
+componentWillReceiveProps: function(nextProps) {
+  const { mapMode } = this.props
+  const { isStartedTimer } = this.state
+ 
+  if ((nextProps.mapMode === MapMode.FLIGHT || nextProps.mapMode === MapMode.TAXI ) &&
+      nextProps.mapMode !== mapMode && isStartedTimer === false) {
+    this.startTweenTimer()
+    this.setState({
+      isStartedTimer: true
+    })
+  }
+},
 ```
 It triggers tweenTimer automatically whenever we select new mapMode. I also have if condition to prevent duplicated fired.
 
@@ -499,7 +944,12 @@ It triggers tweenTimer automatically whenever we select new mapMode. I also have
 
 Notify attributeManager in flight-layer.js to invalidate all vertex, and re-render with new currentTime attribute.
 ```
-updateState({props, changeFlags: {dataChanged}}) { if (dataChanged) { this.state.attributeManager.invalidateAll(); } }
+updateState({props, changeFlags: {dataChanged}}) {
+   if (dataChanged) {
+     this.state.attributeManager.invalidateAll();
+   }
+ }
+
 ```
 ### 5.6 Finally
 
@@ -525,7 +975,12 @@ If you have bright eyes, you might notice that all flights were flew and land at
 
 Yeah, I did it on my purpose, it’s time for your experiment, your exercise 🤗
 ```
-Given flight_data.csv with air_time field. Assumption the velecity of airplain is 999km/h. How do we improve flight-layer-vertex.glsl to simulate it ? // Hint: Take a look at // vec4 shift = vec4(0., 0., mod(_timestamp, trailLength) * 1e-4, 0.). // It's all you need 👍
+Given flight_data.csv with air_time field. Assumption the velecity of airplain is 999km/h.
+How do we improve flight-layer-vertex.glsl to simulate it ?
+ 
+// Hint: Take a look at
+// vec4 shift = vec4(0., 0., mod(_timestamp, trailLength) * 1e-4, 0.).
+// It's all you need 👍
 ```
 
 ## 8. Where’s go from now?
