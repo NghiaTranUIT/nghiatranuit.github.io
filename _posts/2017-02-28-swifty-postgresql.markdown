@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Swifty PostgreSQL
-image: https://nghiatran.me/wp-content/uploads/2017/02/swifty-postgre.jpg
 date: '2017-02-28 16:41:55'
 ---
 

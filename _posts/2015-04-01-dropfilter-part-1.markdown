@@ -1,11 +1,8 @@
 ---
 layout: post
 title: Drop Filter
-image: https://nghiatran.me/wp-content/uploads/2015/04/dropFilter_icon.png
 date: '2015-04-01 10:54:15'
 ---
-
-![dropFilter_icon](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_icon-300x300.png?resize=300%2C300)
 
 It’s brand new series about filter on camera. Yeah, actually, it’s 4th blog i’ve written :D.
 
@@ -15,10 +12,9 @@ Yup, The answer is so simple, because i really love it :D, it makes worst thing
 
 Here is achievement, please take a look to know what we will do next.
 
-<iframe width="560" height="315" src="https://youtu.be/qGRTbdT_qxs" frameborder="0" allowfullscreen></iframe>
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/qGRTbdT_qxs?feature=oembed" width="750"></iframe>
 
 ^ So, is it awesome :)), are you ready to implement it ?
-
 
 ## GPUImage
 

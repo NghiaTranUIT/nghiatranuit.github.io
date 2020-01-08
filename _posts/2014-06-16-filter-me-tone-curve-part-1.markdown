@@ -9,7 +9,6 @@ tags:
 - video-2
 ---
 
-
 ![filterMeIcon_part_1](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/filterMeIcon_part_1-300x300.jpg?resize=300%2C300)  
  Hello guy, in this blog we will discuss some technique for filtering photo like instagram.
 

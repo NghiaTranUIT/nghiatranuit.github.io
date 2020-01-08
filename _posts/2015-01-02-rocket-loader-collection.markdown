@@ -1,7 +1,6 @@
 ---
 layout: post
 title: Rocket Loader Collection
-image: https://nghiatran.me/wp-content/uploads/2015/01/iTunesArtwork.png
 date: '2015-01-02 12:49:35'
 ---
 
@@ -26,48 +25,33 @@ All of loader in Rocket Loader Collection is so similar with MBProgressHUB. Just
 
 
 # What’s inside
-
-
 ## Handwriting
-
-
-# [![Handwriting](https://i1.wp.com/128.199.214.43/wp-content/uploads/2015/01/Handwriting.gif?resize=261%2C468)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2015/01/Handwriting.gif)
-
- 
-
+![Handwriting](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01/Handwriting.gif?resize=261%2C468)
 
 ## Rolling Loader
-
-[![RollingLoader](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/RollingLoader.gif?resize=235%2C426)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/RollingLoader.gif)
-
- 
-
+![RollingLoader](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01//RollingLoader.gif?resize=235%2C426)
 
 ## Equalizer Loader
+![EqualizerLoader](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01//EqualizerLoader.gif?resize=248%2C449)
 
+## Hourglass Loader
+![HourGlassLoader](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01//HourGlassLoader.gif?resize=246%2C446)
 
-# [![EqualizerLoader](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/EqualizerLoader.gif?resize=248%2C449)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/EqualizerLoader.gif)Hourglass Loader
+## Wifi Hub Loader
+![WifiHubLoader](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01/WifiHubLoader.gif?resize=253%2C459)
 
+## Three Dots Glow
+![TheeDotGlow](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01/TheeDotGlow.gif?resize=254%2C460)
 
-## [![HourGlassLoader](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/HourGlassLoader.gif?resize=246%2C446)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/HourGlassLoader.gif)Wifihub Loader – from [Wifi Chua](http://wifichuaapp.com "Wifi Chua")
+## Vietnam Loader
+![VietnamLoader](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01//VietnamLoader.gif?resize=246%2C446)
 
+## Loading Box
+![LoadingBox](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01//LoadingBox.gif?resize=251%2C455)
 
-## [![WifiHubLoader](https://i1.wp.com/128.199.214.43/wp-content/uploads/2015/01/WifiHubLoader.gif?resize=253%2C459)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2015/01/WifiHubLoader.gif)Three Dots Glow
-
-
-## [![TheeDotGlow](https://i0.wp.com/128.199.214.43/wp-content/uploads/2015/01/TheeDotGlow.gif?resize=254%2C460)](https://i0.wp.com/128.199.214.43/wp-content/uploads/2015/01/TheeDotGlow.gif)Vietnam Loader
-
-
-## [![VietnamLoader](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/VietnamLoader.gif?resize=246%2C446)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/VietnamLoader.gif)Loading Box
-
-
-## [![LoadingBox](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/LoadingBox.gif?resize=251%2C455)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/01/LoadingBox.gif)Ten Dots Loader
-
-[![TenDot](https://i1.wp.com/128.199.214.43/wp-content/uploads/2015/01/TenDot.gif?resize=364%2C660)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2015/01/TenDot.gif)
-
+## Tendot
+![TenDot](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/01/TenDot.gif?resize=364%2C660)
  
-
-
 # Feedback
 
 I really really love to hear your voice about my collection. Any pull-request in Github will be approved if it make my collection better.
@@ -75,9 +59,3 @@ I really really love to hear your voice about my collection. Any pull-request in
 Thanks for reading.
 
 Cheer,
-
- 
-
- 
-
-

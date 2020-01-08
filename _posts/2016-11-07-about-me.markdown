@@ -1,7 +1,6 @@
 ---
 layout: post
 title: About Me
-image: https://nghiatran.me/wp-content/uploads/2017/09/gabriel-garcia-marengo-6132.jpg
 date: '2016-11-07 10:46:08'
 ---
 
