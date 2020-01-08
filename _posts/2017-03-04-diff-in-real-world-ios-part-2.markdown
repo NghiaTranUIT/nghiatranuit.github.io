@@ -4,7 +4,6 @@ title: Diff in iOS [Part 2]
 date: '2017-03-04 10:52:22'
 ---
 
-
 Hi, it’s part 2 of my LCS series. Hope you have a great day 😇
 
 In this blog, I would like to cover how we can apply LCS (aka. Diff) into iOS Development. It’s so boring if I keep writing blog with “deep” theory, and no place for enjoying.

@@ -4,8 +4,6 @@ title: Filter Me: Texture & Blend Modem - Part 3
 date: '2014-07-06 12:33:40'
 ---
 
-![filterMeIcon_part_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/filterMeIcon_part_2-300x300.jpg?resize=300%2C300)
-
 In two previous parts of Filter Me series tutorial, I covered some useful technique for applying a filter to photo. Here is a shortcut for you: [Part 1](http://nghiatran.me/index.php/filter-me-tone-curve-part-1/ "Part 1") and [Part 2](http://nghiatran.me/index.php/filter-me-color-lookup-table-part-2/ "Part 2").
 
 If you a new guy, I strongly recommend you should spend couple hours for reading Part 1 and part 2, and ensure you have some knowledge about Core Image and GPUImage before continue.
