@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Filter me: Tone Curve - Part 1
+title: 'Filter me: Tone Curve - Part 1'
 date: '2014-06-16 14:37:20'
 tags:
 - filter

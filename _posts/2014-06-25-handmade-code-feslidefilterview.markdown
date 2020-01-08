@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Handmade Code: FeSlideFilterView
+title: 'Handmade Code: FeSlideFilterView'
 date: '2014-06-25 07:06:25'
 ---
 

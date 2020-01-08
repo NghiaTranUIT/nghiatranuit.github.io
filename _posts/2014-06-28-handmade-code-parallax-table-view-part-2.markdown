@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Handmade Code: Parallax Table View – Part 2
+title: 'Handmade Code: Parallax Table View – Part 2'
 date: '2014-06-28 10:10:28'
 ---
 

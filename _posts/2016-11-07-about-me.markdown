@@ -1,6 +1,7 @@
 ---
 layout: post
 title: About Me
+date: '2016-11-07 14:04:46'
 ---
 
 ## **Hi! I’m Nghia Tran (aka Noah).**

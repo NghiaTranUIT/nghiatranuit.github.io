@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Filter Me: Texture & Blend Modem - Part 3
+title: 'Filter Me: Texture & Blend Modem - Part 3'
 date: '2014-07-06 12:33:40'
 ---
 
@@ -16,7 +16,7 @@ For saving your time, I google some nice blog about GPUImage :
 
 - [GPUImage](https://github.com/BradLarson/GPUImage "GPUImage") by Brad Larson
 - [Build a Photo App with GPUImage ](http://code.tutsplus.com/tutorials/build-a-photo-app-with-gpuimage--mobile-12223 "Build a Photo App")by Mark Hammonds
-- [Image Processing using GPUImage](http://www.theappguruz.com/tutorial/ios-image-processsing-using-gpuimage-framework/ "Image Processing using GPUImage") by <span style="color: #444444;">Swati Choksi.</span>
+- [Image Processing using GPUImage](http://www.theappguruz.com/tutorial/ios-image-processsing-using-gpuimage-framework/ "Image Processing using GPUImage") by Swati Choksi.
 
 
 # What next?

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Filter Me: Color Lookup Table - Part 2
+title: 'Filter Me: Color Lookup Table - Part 2'
 date: '2014-06-17 04:45:11'
 tags:
 - filter

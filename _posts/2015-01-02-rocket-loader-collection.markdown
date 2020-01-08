@@ -9,7 +9,6 @@ Hi everyone, this is long time i haven’t written any post in my blog. So i dec
 
 Almost of them are inspired by [Tim Holman’s collection](http://codepen.io/collection/HtAne/ "Tim Holman's collection") .
 
-
 # Github
 
 I publish this project in github : [https://github.com/NghiaTranUIT/FeSpinner](https://github.com/NghiaTranUIT/FeSpinner "https://github.com/NghiaTranUIT/FeSpinner")
