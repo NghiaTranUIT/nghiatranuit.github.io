@@ -5,7 +5,7 @@ title: About
 
 #### Hi! I'm Nghia Tran (aka Noah).
 
-I'm an iOS/macOS craftsman and creator of [Proxyman](https://proxyman.app/).
+I'm an iOS/macOS craftsman and creator of [Proxyman](https://proxyman.io/).
 
 I also write blog as well as working on few pet projects.
 
@@ -15,7 +15,7 @@ Keep in touch with me at vinhnghiatran[at]gmail[dot]com.
 
 Some current and past pet-projects:
 
-- [Proxyman](https://proxyman.app/): Founder of Proxyman app, which is an advanced HTTP Proxy debugger.
+- [Proxyman](https://proxyman.io/): Founder of Proxyman app, which is an advanced HTTP Proxy debugger.
 - [Uber macOS](): Obviously, you've already known what it's, right?
 - [Titan](https://github.com/NghiaTranUIT/Titan-Postgresql): PostgreSQL client for macOS/iOS. Clean architecture, clean design. Absolutely 100% free and open-source. (in progress).
 - [iOS-awesome-starter-kit](https://github.com/NghiaTranUIT/iOS-Awesome-Starter-Kit) 2016: The perfect combination: Clean Swift + ReSwift + PromiseKit.
@@ -38,7 +38,3 @@ Some current and past pet-projects:
 - iOS Best Practice: The first time I've been a speaker at TekTalk community. Take a look at best practice for iOS developer. It's real problem I encounter when developing feels app. Make a benchmark for each problem: Such as Caching Manager, Pre-heating, Priority-Image download queue, IMGIX. Implemented basic "Source of truth" for State-management and combine with KVO
 - Clean Swift Architecture at Hanoi: A short talk to demonstrate advantages about Clean Swift Architecture under start-up environment.
 Diff Algorithm & Practice Vietnam Swift 2017: Discuss LCS, Diff and applying on UITableView/UICollectionView
-
-### Resume
-
-[Google Drive (2018)](https://docs.google.com/document/d/1y7gSiIO7IwgoRLdK-Y50kUAt8_b3TcDG5qTWhNnZihU/edit?usp=sharing)
