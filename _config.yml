@@ -15,7 +15,7 @@ github_username:    NghiaTranUIT
 # google_analytics:   UA-118536100-2
 
 # Site Settings
-url:                https://nghiatranuit.github.io # main url
+url:                https://nghiatran.me # main url
 baseurl:            /
 permalink:          /:title # Post permalink
 timezone:           Asia/Kuala_Lumpur # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
