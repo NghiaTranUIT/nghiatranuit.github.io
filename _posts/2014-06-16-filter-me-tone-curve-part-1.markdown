@@ -6,9 +6,7 @@ tags:
 - filter
 - media
 - video-2
----
-
-![filterMeIcon_part_1](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/filterMeIcon_part_1-300x300.jpg?resize=300%2C300)  
+--- 
 
  Hello guy, in this blog we will discuss some technique for filtering photo like instagram.
 

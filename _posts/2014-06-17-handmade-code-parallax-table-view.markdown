@@ -4,9 +4,6 @@ title: 'Handmade Code: Parallax Table View - Part 1'
 date: '2014-06-17 08:17:20'
 ---
 
-
-![TableParallax_icon-01](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/TableParallax_icon-01-300x300.jpg?resize=300%2C300)
-
 This is the first blog about crafting customize control from scratch that I call with epic name “Handmade code” ;]
 
 

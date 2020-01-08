@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Diff in iOS [Part 2]
+title: 'Diff in iOS [Part 2]'
 date: '2017-03-04 10:52:22'
 ---
 

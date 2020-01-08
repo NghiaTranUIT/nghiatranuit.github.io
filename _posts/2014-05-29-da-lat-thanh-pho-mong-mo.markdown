@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Đà Lạt, thành phố mộng mơ!
+title: 'Đà Lạt, thành phố mộng mơ!'
 date: '2014-05-29 16:50:23'
 ---
 

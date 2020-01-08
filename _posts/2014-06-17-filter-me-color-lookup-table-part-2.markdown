@@ -8,8 +8,6 @@ tags:
 - video-2
 ---
 
-![filterMeIcon_part_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/filterMeIcon_part_2-300x300.jpg?resize=300%2C300)
-
 Hi, We will pick up right where we left off in Part one
 
 In the last part, I covered to use curve file which was built by Photoshop, and how to apply it to your photo.
