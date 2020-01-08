@@ -80,7 +80,7 @@ Heat-map for better look
 
 Flight record data with Flightlayer (Static)
 
-[![](https://img.youtube.com/vi/kgcJ0rftIUA/0.jpg)](https://www.youtube.com/watch?v=kgcJ0rftIUA?t=1m6s)
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=kgcJ0rftIUA" frameborder="0" allowfullscreen></iframe>
 
 Dynamic visualization with GLSL shader
 
@@ -383,6 +383,7 @@ Feels free to spent 5 mins for experiment [Mapbox’s map editor](https://www.ma
 ### 4.4 Visualize trees in New York
 
 #### Parsing tree_new_york.csv
+
 ```js
 _loadData() {
   
@@ -390,7 +391,9 @@ _loadData() {
   this._loadCsvFile(TREE_DATA, (data)=>{this.props.dispatch(loadTrees(data))})
 },
 ```
+
 _loadCsvFile is helper func I wrote for you. It reads csv file and parsing into array. Then dispatching **loadTrees** action to ReduxStore
+
 ```js
 case 'LOAD_TREES': {
     let trees = action.data.map((item)=>{
@@ -403,6 +406,7 @@ case 'LOAD_TREES': {
     return {...state, trees}
 }
 ```
+
 The purpose of our tutorial is representing the distribution of tree. So we ignore unnecessary fields, we only care long/lat. It’s why I .map() to transform items into position object. Then returning the result into mainState. It’s not hard If you’re familiar with React+Redux.
 
 #### TreeScreenGridOverlay.js
@@ -470,6 +474,7 @@ ScreenGirdLayer is perfect choose if you would like to visualize the distributio
 It’s extremely useful to present the large data over the world. There are many different [color schemes](https://en.wikipedia.org/wiki/Color_scheme "Color scheme") that can be used to illustrate the heatmap, with perceptual advantages and disadvantages for each.
 
 It’s time to bring heatmap. Come back at _renderTreesHeatMapOverlay in **tree_heatmap_overlay.js** and put it down.
+
 ```js
 export function _renderTreesHeatMapOverlay(param) {
     const { mapViewState, trees } = param.props
@@ -485,7 +490,8 @@ export function _renderTreesHeatMapOverlay(param) {
     )
 }
 ```
-**lngLatAccessor** : Data accessors can be provided if your data doesn’t fit the expected form`{longitude, latitude}`.
+
+**lngLatAccessor** : Data accessors can be provided if your data doesn’t fit the expected form `{longitude, latitude}`.
 
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/03/deck.gl_16.jpg)
 
@@ -578,7 +584,7 @@ Fully documentation [here](https://uber.github.io/deck.gl/#/documentation/creati
 
 #### Implement FlightLayer
 
-Please navigate to** ../scr/layers/core/flight-data/flight-data.js. **I prepared all for saving time 🤗
+Please navigate to **../scr/layers/core/flight-data/flight-data.js** I prepared all for saving time 🤗
 
 in flight-data.js
 ```js
@@ -953,19 +959,18 @@ updateState({props, changeFlags: {dataChanged}}) {
 ```
 ### 5.6 Finally
 
-![](https://i0.wp.com/img.memesuper.com/21b10a8a10c5427cec63e3ed65d9d77e_leonardo-dicaprio-cheers-meme-memes-on-success.jpeg)
-
 Time for going back to terminal and type holy spell.
 ```bash
 # To make sure you've installed packages correctly 
 yarn install 
 yarn start
 ```
-[![](https://img.youtube.com/vi/kgcJ0rftIUA”/0.jpg)](https://www.youtube.com/watch?v=kgcJ0rftIUA”)
+
+<iframe width="560" height="315" src="https://www.youtube.com/watch?v=kgcJ0rftIUA" frameborder="0" allowfullscreen></iframe>
 
 Feels free to switch between each map mode. I belive you will be impressed what we’ve done 💯
 
-## 7. Source code
+## 6. Source code
 
 I published all source in my github account. Feels free to clone and create contribution if you have any great idea 😉
 

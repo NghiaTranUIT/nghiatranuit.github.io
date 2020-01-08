@@ -23,13 +23,13 @@ In another hand, diff is also useful to compare pair of images.
 
 ![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/snapshots-reference-59b0b96b.png)
 
-- [IGListKit](https://github.com/Instagram/IGListKit) is amazing open-source, built from Instagram Engineering team. According from their blog, IGListKit still use improved Diff (Paul Heckel’s algorithm) to calculate and perform insert/move/reload/delete without crashed with **linear time BigO(n), **it’s really increadible result.
+- [IGListKit](https://github.com/Instagram/IGListKit) is amazing open-source, built from Instagram Engineering team. According from their blog, IGListKit still use improved Diff (Paul Heckel’s algorithm) to calculate and perform insert/move/reload/delete without crashed with **linear time BigO(n)**, it’s really increadible result.
 
-**![](https://i1.wp.com/cdn-images-1.medium.com/max/1600/1*7w2BL8pAqAs-qMiDWHLENA.gif?resize=541%2C260&ssl=1)**
+![](https://i1.wp.com/cdn-images-1.medium.com/max/1600/1*7w2BL8pAqAs-qMiDWHLENA.gif?resize=541%2C260&ssl=1)
 
 To understand deeply LCS and a apply it to real world. I intent to split into 2 parts.
 
-**Part 1:** We will discuss how to implement LSC with **naive solution** and with** Dynamic Programming**, by using Memorization table. I will try to visualize the algorithm of both solution as possible. I will implement by pure swift to make sure everybody can understand before moving to real shit.
+**Part 1:** We will discuss how to implement LSC with **naive solution** and with **Dynamic Programming**, by using Memorization table. I will try to visualize the algorithm of both solution as possible. I will implement by pure swift to make sure everybody can understand before moving to real shit.
 
 The main goal, we will extend Array<Element>. Put more effort, so it can reusable in any kind of array.
 
@@ -83,32 +83,29 @@ or A = “acbaed”, B = “abcadf” => LCS is “acad”, length = 4
  
 
  
+----------------------------------------------------------------------------------------
 
  
 
  
 
  
-
- 
-
  
 
 Before walking into Implementation and Explanation section. It would be better if you try putting your hand in real shit.
 
 Don’t worry about performance or Big(O) yet, just finish it by yourself.
 
-You can try online at **[HackerRank](https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence)** with real test-cases 😉
+You can try online at [HackerRank](https://www.hackerrank.com/challenges/dynamic-programming-classics-the-longest-common-subsequence) with real test-cases 😉
 
-*if you don’t have enough patient, just scroll down and  keep reading *😪
-
- 
+**if you don’t have enough patient, just scroll down and  keep reading**😪
 
  
 
- 
 
- 
+
+
+----------------------------------------------------------------------------------------
 
  
 
@@ -127,7 +124,7 @@ Don’t worry about it at this time, I will come to naive approach firstly, by u
 
 If we come with recursion, two important things we should to defined is** sub-problem** and **base-recursion(exit)**
 
-### *Sub-problem
+### Sub-problem
 
 **Case 1: Both of character is same.**
 
@@ -175,7 +172,7 @@ A[m - 1] == B[n - 1] => findLCS(A, B) = 1 + findLCS(A[0..m-2], B[0..n-2])
 A[m - 1] != B[n - 1] => findLCS(A, B) = MAX(findLCS(A[0..m-2], B[0..n-1]), findLCS(A[0..m-1], B[0..n-2]))
 ```
 
-### *Base recursion (exit)
+### Base recursion (exit)
 
 So, how about exit recursion ? If you’re working on recursion functionality, please, don’t forget the EXIT.
 
@@ -201,7 +198,7 @@ A[m - 1] != B[n - 1] => findLCS(A, B) = MAX(findLCS(A[0..m-2], B[0..n-1]), findL
 
 Imagination is really hard, so I will draw a tree to see what’s behind the scene.
 
-![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_13-300x117.png?resize=670%2C261)
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2017/02/table_13.png)
 
 ^ As you can see, there are few sub-problems has been solved many times. Time complexity is O(2<sup>n</sup>) in worse case when all character of X and Y are mismatch. It will be [exponential](https://en.wikipedia.org/wiki/Exponential_growth) by time.
 
