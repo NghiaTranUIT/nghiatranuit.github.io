@@ -130,7 +130,7 @@ We created DiffTransform enum for representing a “transform”. Please notice 
 
 With DiffTransform, we can store “kind of transform”, the index, and the real data at the same object, with less code as possible 😉
 
-In few trivial programming language like Java or Objective-C, it’s impossible unfortunately. We must create class and enum, but from Swift 2.0, we can do it. It’s save me a lot of redundancy code. Less code, less bug. You know 🤘🏽
+In few trivial programming language like Java or objc, it’s impossible unfortunately. We must create class and enum, but from Swift 2.0, we can do it. It’s save me a lot of redundancy code. Less code, less bug. You know 🤘🏽
 
 In case it’s first time you’ve heard it. Take a look at [Generic Enum](https://appventure.me/2015/10/17/advanced-practical-enum-examples/#sec-2-3) and [Enum with associated-value](https://appventure.me/2015/10/17/advanced-practical-enum-examples/#sec-1-5)
 

@@ -80,7 +80,7 @@ We use GPUImageStillCamera – subclass of GPUVideoCamera. By reuse it, we don�
 
 GPUImageGrayscaleFilter is just simple things to help us apply grayscale to camera easily.
 
-```objective-c
+```objc
 // GPUImage View 
 @property (weak, nonatomic) IBOutlet GPUImageView *topCameraImageView; 
 // Still Camera 
@@ -91,7 +91,7 @@ GPUImageGrayscaleFilter is just simple things to help us apply grayscale to came
 
 3 – Configure them
 
-```objective-c
+```objc
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -190,7 +190,7 @@ Theory is enough, time to implement it by your hand.
 
 2 – Open viewcontroller.m and add it as outlet, new mask Layer and new filter.
 
-```objective-c
+```objc
 // GPUImage View
 @property (weak, nonatomic) IBOutlet GPUImageView *bottomCameraView;
  
@@ -203,7 +203,7 @@ Theory is enough, time to implement it by your hand.
 
 Finally, we change implement section with new code.
 
-```objective-c
+```objc
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -279,7 +279,7 @@ Yeah, be inde-dev, we should ask ourself with those similar question. Each uniqu
 **1 – Triangle mask**  
  I don’t prefer rectangle mask anymore, try triangle instead 😀 .So replace your initMask with new one.
 
-```objective-c
+```objc
 -(void) initMask
 {
     if (!_maskLayer)
@@ -321,7 +321,7 @@ Yeah, be inde-dev, we should ask ourself with those similar question. Each uniqu
 
 **FeBasicAnimationBlock.h**
 
-```objective-c
+```objc
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
  
@@ -339,7 +339,7 @@ typedef void (^FeBasicAnimationDidStopBlock)();
 
 **FeBasicAnimationBlock.m**
 
-```objective-c
+```objc
 #import "FeBasicAnimationBlock.h"
  
 @implementation FeBasicAnimationBlock
@@ -367,7 +367,7 @@ Add PanGesture into @interface
 
 And few new API
 
-```objective-c
+```objc
 -(void) initGesture
 {
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
@@ -485,7 +485,7 @@ It’s easy to understand what i wrote. The final answer is find position of O p
 
 Add two label into @interface
 
-```
+```objc
 // Label
 @property (strong, nonatomic) UILabel *grayscaleLbl;
 @property (strong, nonatomic) UILabel *amatorkarLbl;
@@ -493,7 +493,7 @@ Add two label into @interface
 
 Initial two labels
 
-```
+```objc
 -(void) initLabels
 {
     if (!_grayscaleLbl)
@@ -529,7 +529,7 @@ Initial two labels
 
 Add 2 line of code in next of UIGestureRecognizerStateChanged.
 
-```
+```objc
 // Calculate O depend on maskLayer's transform
 CGPoint center = [self centerPointerDependTransform:_maskLayer.transform];
  
@@ -539,7 +539,7 @@ CGPoint center = [self centerPointerDependTransform:_maskLayer.transform];
 
 And here is the math.
 
-```
+```objc
 -(CGPoint) centerPointerDependTransform:(CATransform3D) transform
 {
     // Translate lable
@@ -580,7 +580,7 @@ And here is the math.
 
 and
 
-```
+```objc
 -(void) setLabelsWithCenter:(CGPoint) center
 {
     // Set center
