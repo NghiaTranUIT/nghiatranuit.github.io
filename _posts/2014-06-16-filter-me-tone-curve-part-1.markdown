@@ -1,7 +1,6 @@
 ---
 layout: post
-title: 'Filter me: Tone Curve - Part 1'
-image: https://nghiatran.me/wp-content/uploads/2014/06/filterMeIcon_part_1.jpg
+title: Filter me: Tone Curve - Part 1
 date: '2014-06-16 14:37:20'
 tags:
 - filter
@@ -9,7 +8,8 @@ tags:
 - video-2
 ---
 
-![filterMeIcon_part_1](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/filterMeIcon_part_1-300x300.jpg?resize=300%2C300)  
+![filterMeIcon_part_1](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/filterMeIcon_part_1-300x300.jpg?resize=300%2C300)  
+
  Hello guy, in this blog we will discuss some technique for filtering photo like instagram.
 
 Nowaday, If you take a tour around AppStore, you will realize more than 80% app which has filter photo or video ability. This is the must-have featured in your app especially social app or photo video editor app.
@@ -44,11 +44,11 @@ You can create own custom filter with GPUImage, but you must have a little knowl
 
 Here is a chart comparison between GPUImage vs Core Image by Brad Larson
 
-[visualizer id=”645″]
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/chart_1.png)
 
 You see, in case processing video, GPUImage took 2,5ms to upload frame from camera, apply gamma filter and display to screen, versus 106 ms for the same operation using Core Image.
 
-[visualizer id=”648″]
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/chart_2.png)
 
 One more time, GPUImage process photo faster 4x more than Core Image in some common case.
 
@@ -67,7 +67,26 @@ Core Image also include ton of filter. But you can custom it by own. But to addi
 
 Using like that :
 
-// 1 NSString *filePath = [[NSBundle mainBundle] pathForResource:@"image" ofType:@"png"]; NSURL *fileNameAndPath = [NSURL fileURLWithPath:filePath]; // 2 CIImage *beginImage = [CIImage imageWithContentsOfURL:fileNameAndPath]; // 3 CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone" keysAndValues: kCIInputImageKey, beginImage, @"inputIntensity", @0.8, nil]; CIImage *outputImage = [filter outputImage]; // 4 UIImage *newImage = [UIImage imageWithCIImage:outputImage]; self.imageView.image = newImage;
+```objc
+// 1
+NSString *filePath =
+  [[NSBundle mainBundle] pathForResource:@"image" ofType:@"png"];
+NSURL *fileNameAndPath = [NSURL fileURLWithPath:filePath];
+ 
+// 2
+CIImage *beginImage =
+  [CIImage imageWithContentsOfURL:fileNameAndPath];
+ 
+// 3
+CIFilter *filter = [CIFilter filterWithName:@"CISepiaTone"
+                              keysAndValues: kCIInputImageKey, beginImage,
+                    @"inputIntensity", @0.8, nil];
+CIImage *outputImage = [filter outputImage];
+ 
+// 4
+UIImage *newImage = [UIImage imageWithCIImage:outputImage];
+self.imageView.image = newImage;
+```
 
 1.  Init Path for Image in bundle
 2. Init CIImage
@@ -92,53 +111,53 @@ We use Photoshop to create own tone curve, and apply it to photo by Core Image.
 
 Open Photoshop
 
-[![Curve_blog_1](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_1.png?resize=303%2C143)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_1.png)
+![Curve_blog_1](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Curve_blog_1.png?resize=303%2C143)
 
- Take [Original Photo](http://128.199.214.43/wp-content/uploads/2014/06/toneCurve_photoshop_before.jpg "Original Photo") I prepared for you.
+ Take [Original Photo](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/toneCurve_photoshop_before.jpg "Original Photo") I prepared for you.
 
 Open with photoshop
 
-[![Curve_blog_2](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_2.png?resize=829%2C518)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_2.png)
+![Curve_blog_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Curve_blog_2.png?resize=829%2C518)
 
 Go to Image -> Adjustments -> Curves …
 
-[![Curve_blog_3](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_3.png?resize=508%2C205)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_3.png)
-
- 
+![Curve_blog_3](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Curve_blog_3.png?resize=508%2C205)
 
 Here is Tone Curve tool. You can easily tone of R G or G by drag each point. I created sample [Sample_Tone_Curve](http://www.mediafire.com/download/swbfvzvx6ckd6gg/customToneCurve.acv "Sample_Tone_Curve")  for you.
 
- 
+![Curve_blog_4](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Curve_blog_4.png?resize=396%2C466)
 
-[![Curve_blog_4](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_4.png?resize=396%2C466)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_4.png)
-
-By changing each point in tone curve tool, we can see realtime filtered photo. And here is my result.
-
- 
+By changing each point in tone curve tool, we can see realtime filtered photo. And here is my result. 
 
 **After**
 
-[![toneCurve_photoshop_before](https://i2.wp.com/128.199.214.43/wp-content/uploads/2014/06/toneCurve_photoshop_before.jpg?resize=744%2C495)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2014/06/toneCurve_photoshop_before.jpg)
+![toneCurve_photoshop_before](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/toneCurve_photoshop_before.jpg?resize=744%2C495)
 
 **Before**
 
-[![toneCurve_photoshop_after](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/toneCurve_photoshop_after.jpg?resize=744%2C496)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/toneCurve_photoshop_after.jpg)
-
- 
+![toneCurve_photoshop_after](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/toneCurve_photoshop_after.jpg?resize=744%2C496) 
 
 Yep, the second photo look pretty than original. The finally, you should export to “Curve file”.
 
 
-## [![Curve_blog_5](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_5.png?resize=129%2C131)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/Curve_blog_5.png)How to use “curve file”
+![Curve_blog_5](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Curve_blog_5.png?resize=129%2C131)
 
 You can apply “curve file” to your photo easily. Just download [GPUImage](https://github.com/BradLarson/GPUImage "GPUImage") here.
 
 Add GPUImage to your project as independent project or build static library. Just a couple of code
 
--(UIImage *) imageByFitering:(UIImage *)image { NSLog(@"filter with %@",_filterNameACV); GPUImageToneCurveFilter *curveFilter = [[GPUImageToneCurveFilter alloc] initWithACV:_filterNameACV]; return [curveFilter imageByFilteringImage:image]; }
+```objc
+-(UIImage *) imageByFitering:(UIImage *)image
+{
+    NSLog(@"filter with %@",_filterNameACV);
+    
+    GPUImageToneCurveFilter *curveFilter = [[GPUImageToneCurveFilter alloc] initWithACV:_filterNameACV];
+    
+    return [curveFilter imageByFilteringImage:image];
+}
+```
 
 So, what about Core Image. Core Image provide “CIToneCurve” for dev. But there is no method that allow read data from “curve file”. If you still want implement it. You take a deep at [this link](http://www.adobe.com/devnet-apps/photoshop/fileformatashtml/ "this link"). This describe how Structure of Curve file was build. and you can read it by following instruction.
-
 
 ## Here we go
 

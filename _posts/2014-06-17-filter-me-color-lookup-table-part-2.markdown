@@ -1,7 +1,6 @@
 ---
 layout: post
-title: 'Filter Me: Color Lookup Table - Part 2'
-image: https://nghiatran.me/wp-content/uploads/2014/06/filterMeIcon_part_2.jpg
+title: Filter Me: Color Lookup Table - Part 2
 date: '2014-06-17 04:45:11'
 tags:
 - filter
@@ -9,10 +8,9 @@ tags:
 - video-2
 ---
 
+![filterMeIcon_part_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/filterMeIcon_part_2-300x300.jpg?resize=300%2C300)
 
-![filterMeIcon_part_2](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/filterMeIcon_part_2-300x300.jpg?resize=300%2C300)
-
-Hi, We will pick up right where we left off in [Part one](http://nghiatran.me/index.php/filter-photo-like-instagram/ "Part One").
+Hi, We will pick up right where we left off in Part one
 
 In the last part, I covered to use curve file which was built by Photoshop, and how to apply it to your photo.
 
@@ -22,7 +20,7 @@ Standard approach to creating photo-like Instagram in last part. We just apply 
 
 Here is list action which designer often do :
 
-[![FilterMe_Part2_1](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_1.png?resize=281%2C611)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_1.png)
+![FilterMe_Part2_1](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_1.png?resize=281%2C611)
 
 Sounds simple enough, but in practice, I found it quite hard to implement Curves and Selective Color in my iOS app exactly the way Photoshop does it. That should be crazy if I and you as iOS developer will apply each step by code. There is must solution for an implement that.
 
@@ -31,51 +29,47 @@ Sounds simple enough, but in practice, I found it quite hard to implement Curves
 
 LUT is a recuse for iOS dev ;]
 
-<span style="color: #595959;">In the field of image processing, when we want to adjust the color of an image, often used Color Lookup Table (referred ColorLUT) technology.</span>
+In the field of image processing, when we want to adjust the color of an image, often used Color Lookup Table (referred ColorLUT) technology.
 
-<span class="notranslate">Here is a simple example, if we want to make the R-value of each pixel in the image into the original 0.3-fold, the basic approach is to put the R-value of each pixel is multiplied by 0.3, assuming the size of the image is 1024×768, then the total to 786,432 times a floating-point multiplication.</span>
+Here is a simple example, if we want to make the R-value of each pixel in the image into the original 0.3-fold, the basic approach is to put the R-value of each pixel is multiplied by 0.3, assuming the size of the image is 1024×768, then the total to 786,432 times a floating-point multiplication.
 
-<span class="notranslate">If we start the first result to build a table, all the processed color values (R-value is 0.3 times) after recording it, and then take the color value of each pixel in the table, the color values obtained after processing, So long as we do 786432 lookup action, faster than many floating-point operations.</span> <span class="notranslate">In fact most of the color adjustment algorithms many complexes than this example, and therefore better highlight the high efficiency of the look-up table.</span>
+If we start the first result to build a table, all the processed color values (R-value is 0.3 times) after recording it, and then take the color value of each pixel in the table, the color values obtained after processing, So long as we do 786432 lookup action, faster than many floating-point operations.In fact most of the color adjustment algorithms many complexes than this example, and therefore better highlight the high efficiency of the look-up table.
 
 Here’s a sample RGB lookup table:
 
-[![FilterMe_Part2_2](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_2.png?resize=512%2C512)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_2.png)
+![FilterMe_Part2_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_2.png?resize=512%2C512)
 
 So, theory enough, take action.
 
-Open photoshop, load [this photo](http://128.199.214.43/wp-content/uploads/2014/06/Filter-Me_sample.jpg "Sample"), and give it to your designer. They will make some adjustment to desired effect.
+Open photoshop, load [this photo](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Filter-Me_sample.jpg "Sample"), and give it to your designer. They will make some adjustment to desired effect.
 
-[![FilterMe_Part2_3](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_3.png?resize=850%2C532)](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_3.png)
+![FilterMe_Part2_3](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_3.png?resize=850%2C532)
 
 But now, we are an iOS dev, I take a tour around google and seek some action Photoshop.
 
 Here is my found: [http://www.deviantart.com/art/ATP-Dylan-Action-for-Photoshop-461167798](http://www.deviantart.com/art/ATP-Dylan-Action-for-Photoshop-461167798)
 
-You can find by yourself, but make sure:”**There is no **<span style="color: #000000;">**effects use additional textures, blur, sharpen and some other filters which will not work with a simple lookup texture approach**“. Your action should just adjust curve, layer, selective-color.</span>
+You can find by yourself, but make sure: There is no effects use additional textures, blur, sharpen and some other filters which will not work with a simple lookup texture approach. Your action should just adjust curve, layer, selective-color.
 
 Download this action and run it.
 
-[![FilterMe_Part2_4](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_4.png?resize=338%2C309)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_4.png)
-
- 
+![FilterMe_Part2_4](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_4.png?resize=338%2C309) 
 
 And here is my result
 
-[![FilterMe_Part2_5](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_5.png?resize=850%2C531)](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_5.png)
-
- 
+![FilterMe_Part2_5](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_5.png?resize=850%2C531) 
 
 Look amazing ;]
 
 But this is work of a designer, my job is to bring this miracle to iOS app.
 
-Continue, Download [original LUT](http://128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_OriginalLUT.png "Original LUT")
+Continue, Download [original LUT](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_OriginalLUT.png "Original LUT")
 
 Open this with photoshop, take actions like I did before to original LUT.
 
 And save LUT as ProcessedLUT.png (Must save as PNJ extension)
 
-[![FilterMe_Part2_ProcessedLUT](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_ProcessedLUT.png?resize=359%2C359)](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_ProcessedLUT.png)
+![FilterMe_Part2_ProcessedLUT](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_ProcessedLUT.png?resize=359%2C359)
 
 So, we have finished the first stage as an important stage in this blog. Next, we work with iOS.
 
@@ -83,26 +77,36 @@ For simple, I create a category for you. Feel free to download [it here](http://
 
 Ex:
 
-// Load photo UIImage *photo = [UIImage imageNamed:@"Filter-Me_sample.jpg"]; // Create filter CIFilter *lutFilter = [CIFilter filterWithLUT:@"FilterMe_Part2_ProcessedLUT" dimension:64]; // Set parameter CIImage *ciImage = [[CIImage alloc] initWithImage:photo]; [lutFilter setValue:ciImage forKey:@"inputImage"]; CIImage *outputImage = [lutFilter outputImage]; CIContext *context = [CIContext contextWithOptions:[NSDictionary dictionaryWithObject:(__bridge id)(CGColorSpaceCreateDeviceRGB()) forKey:kCIContextWorkingColorSpace]]; UIImage *newImage = [UIImage imageWithCGImage:[context createCGImage:outputImage fromRect:outputImage.extent]]; _imageView.image = newImage;
+```objc
+// Load photo
+    UIImage *photo = [UIImage imageNamed:@"Filter-Me_sample.jpg"];
+    
+    // Create filter
+    CIFilter *lutFilter = [CIFilter filterWithLUT:@"FilterMe_Part2_ProcessedLUT" dimension:64];
+    
+    // Set parameter
+    CIImage *ciImage = [[CIImage alloc] initWithImage:photo];
+    [lutFilter setValue:ciImage forKey:@"inputImage"];
+    CIImage *outputImage = [lutFilter outputImage];
+    
+    CIContext *context = [CIContext contextWithOptions:[NSDictionary dictionaryWithObject:(__bridge id)(CGColorSpaceCreateDeviceRGB()) forKey:kCIContextWorkingColorSpace]];
+    
+    UIImage *newImage = [UIImage imageWithCGImage:[context createCGImage:outputImage fromRect:outputImage.extent]];
+    
+    _imageView.image = newImage;
+```
 
 Just remember to add CoreImage and OpenGLES framework in your project.
 
 Here is my photo after process by LUT
 
-[![FilterMe_Part2_6](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_6.png?resize=577%2C399)](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/06/FilterMe_Part2_6.png)
-
- 
-
+![FilterMe_Part2_6](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_6.png?resize=577%2C399)
 
 # Another way
-
 You can easily implement LUT process in GPUImage. Just use **GPUImageLookupFilter **class.
 
-
 # Source code
-
-[su_button url=”https://github.com/NghiaTranUIT/FilterMe_Part_2″ target=”blank” style=”flat” size=”6″ icon=”icon: cloud-download”]Github[/su_button]
-
+[Github](https://github.com/NghiaTranUIT/FilterMe_Part_2)
 
 # Where to go from here ?
 

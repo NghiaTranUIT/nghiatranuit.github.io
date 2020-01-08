@@ -1,19 +1,14 @@
 ---
 layout: post
-title: 'Filter Me: Texture & Blend Modem - Part 3'
-image: https://nghiatran.me/wp-content/uploads/2014/06/filterMeIcon_part_2.jpg
+title: Filter Me: Texture & Blend Modem - Part 3
 date: '2014-07-06 12:33:40'
 ---
 
-
-![filterMeIcon_part_2](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/06/filterMeIcon_part_2-300x300.jpg?resize=300%2C300)
-
- 
+![filterMeIcon_part_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/filterMeIcon_part_2-300x300.jpg?resize=300%2C300)
 
 In two previous parts of Filter Me series tutorial, I covered some useful technique for applying a filter to photo. Here is a shortcut for you: [Part 1](http://nghiatran.me/index.php/filter-me-tone-curve-part-1/ "Part 1") and [Part 2](http://nghiatran.me/index.php/filter-me-color-lookup-table-part-2/ "Part 2").
 
 If you a new guy, I strongly recommend you should spend couple hours for reading Part 1 and part 2, and ensure you have some knowledge about Core Image and GPUImage before continue.
-
 
 # Before reading
 
@@ -30,19 +25,13 @@ For saving your time, I google some nice blog about GPUImage :
 
 To create an app like Instagram’s filters, I will cover everything we need to implement it, including apply texture and adjust blend mode into the photo.
 
-In brief, what we will do, I have shown you a gallery of photos I did in an hour ago.
+In brief, what we will do, I have shown you a gallery of photos I did in a hour ago.
 
-<script data-cfasync="false" type="text/javascript">var lsjQuery = jQuery;</script><script data-cfasync="false" type="text/javascript">
-lsjQuery(document).ready(function() {
-if(typeof lsjQuery.fn.layerSlider == "undefined") {
-if( window._layerSlider && window._layerSlider.showNotice) { 
-window._layerSlider.showNotice('layerslider_1','jquery');
-}
-} else {
-lsjQuery("#layerslider_1").layerSlider({sliderVersion: '', skinsPath: 'https://nghiatran.me/wp-content/plugins/LayerSlider/static/layerslider/skins/', showCircleTimer: false});
-}
-});
-</script><div class="ls-wp-container fitvidsignore" id="layerslider_1" style="width:1280px;height:720px;margin:0 auto;margin-bottom: 0px;"><div class="ls-slide" data-ls="kenburnsscale:1.2;">![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_9.jpg?resize=640%2C640&ssl=1)![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_8.jpg?resize=640%2C640&ssl=1)</div></div>Steps to do  :
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_9.jpg?resize=640%2C640&ssl=1)
+
+![](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_8.jpg?resize=640%2C640&ssl=1)
+
+Steps to do:
 
 1. Download vintage texture brush from Google
 2. Using Photoshop and create your own texture ( by combining brush and blend mode)
@@ -51,51 +40,48 @@ lsjQuery("#layerslider_1").layerSlider({sliderVersion: '', skinsPath: 'https://n
 
 The first photo is an original photo. As you see, each next photo has a different style, by adding textures like grunge, you can turn your photo like Retro, Vintage style.
 
-
 # Step 1 – Prepare yourself
 
 Before starting work, We should download awesome brush for vintage style in google. Here is what I find [bursh](http://speckyboy.com/2012/02/20/20-subtle-and-soft-textured-photoshop-brush-packs-225-brushes/ "Awesome brush").
 
 Download what you want, and run it.
 
-[![FilterMe_Part3_1](https://i2.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_1.png?resize=410%2C54)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_1.png)
+![FilterMe_Part3_1](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_1.png?resize=410%2C54)
 
 
 # Step 2 – Photoshop is God
 
 And open Photoshop app and create a new canvas with 640px as width and height.
 
-[![FilterMe_Part3_2](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/07/Screen-Shot-2014-07-06-at-13.24.49.png?resize=607%2C425)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/07/Screen-Shot-2014-07-06-at-13.24.49.png)
+![FilterMe_Part3_2](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/Screen-Shot-2014-07-06-at-13.24.49.png?resize=607%2C425)
 
 Ensure you choose Color Mode is RGB Color, not CMYK.
 
-Drag this [original photo](http://128.199.214.43/wp-content/uploads/2014/07/originalPhoto.jpg "Original Photo") to your canvas, and create new layer for your texture
+Drag this [original photo](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/originalPhoto.jpg "Original Photo") to your canvas, and create new layer for your texture
 
-[![FilterMe_Part3_4](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_4.png?resize=201%2C121)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_4.png)
+![FilterMe_Part3_4](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_4.png?resize=201%2C121)
 
-Next, open your brush. As you see, there are many brush texture in your gallery.
+Next, open your brush. As you see, there are many brush texture in your gallery
 
-[![FilterMe_Part3_5](https://i2.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_5.png?resize=442%2C419)](https://i2.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_5.png)Pick one, adjust a size and draw to photo whatever you like. If you want to improve brush’s effect, you can choose blend mode in the Layer panel.
+![FilterMe_Part3_5](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_5.png?resize=442%2C419)
 
-[![FilterMe_Part3_SlideShow_3](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_SlideShow_3.jpg?resize=640%2C640)](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/07/FilterMe_Part3_SlideShow_3.jpg)
+Pick one, adjust a size and draw to photo whatever you like. If you want to improve brush’s effect, you can choose blend mode in the Layer panel.
+
+![FilterMe_Part3_SlideShow_3](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_3.jpg?resize=640%2C640)
 
 Above photo is the result when I combine brush which I downloaded from the Internet with** Blend mode is Linear Burn.**
 
 Feel free for adjusting option before saving.
 
-
 ## Save your texture
 
 You must save your texture as PNG, and make sure you just turn “the eye” of texture layer. Turn off “the eye” of the original photo.
 
-[![texture_linearBurnBlend_1](https://i0.wp.com/128.199.214.43/wp-content/uploads/2014/07/texture_linearBurnBlend_1-300x300.png?resize=300%2C300)](https://i1.wp.com/128.199.214.43/wp-content/uploads/2014/07/texture_linearBurnBlend_1.png)
-
- 
+![texture_linearBurnBlend_1](https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/texture_linearBurnBlend_1-300x300.png?resize=300%2C300) 
 
 Bunch of texture which I have created and collected for you.
 
-[su_button url=”https://github.com/NghiaTranUIT/FilterMe-Texture” target=”blank” style=”flat” size=”6″ icon=”icon: cloud-download”]Textures[/su_button]
-
+[Textures](https://github.com/NghiaTranUIT/FilterMe-Texture)
 
 # Step 3 – GPUImage
 
@@ -107,7 +93,28 @@ The GPUImage library provides plenty of useful classes for blending texture with
 
 Here is snippet code for you
 
- GPUImageNormalBlendFilter *filter = [[GPUImageNormalBlendFilter alloc] init]; [filter useNextFrameForImageCapture]; // 1 // 2 // GPUImage picture UIImage *imageOriginal = [UIImage imageNamed:@"originalPhoto.jpg"]; UIImage *imageOverlay = [UIImage imageNamed:filterName]; GPUImagePicture *picture_1 = [[GPUImagePicture alloc] initWithImage:imageOriginal]; GPUImagePicture *picture_2 = [[GPUImagePicture alloc] initWithImage:imageOverlay]; // 3 - Target [picture_1 addTarget:filter]; [picture_1 processImage]; [picture_2 addTarget:filter]; [picture_2 processImage]; // 4 - Blend UIImage *destinationPhoto = [filter imageFromCurrentFramebuffer];
+```objc
+  GPUImageNormalBlendFilter  *filter = [[GPUImageNormalBlendFilter alloc] init];
+    [filter useNextFrameForImageCapture]; // 1
+ 
+    // 2
+    // GPUImage picture
+    UIImage *imageOriginal = [UIImage imageNamed:@"originalPhoto.jpg"];
+    UIImage *imageOverlay = [UIImage imageNamed:filterName];
+    
+    GPUImagePicture *picture_1 = [[GPUImagePicture alloc] initWithImage:imageOriginal];
+    GPUImagePicture *picture_2 = [[GPUImagePicture alloc] initWithImage:imageOverlay];
+    
+    // 3 - Target
+    [picture_1 addTarget:filter];
+    [picture_1 processImage];
+    
+    [picture_2 addTarget:filter];
+    [picture_2 processImage];
+    
+    // 4 - Blend
+    UIImage *destinationPhoto = [filter imageFromCurrentFramebuffer];
+```
 
 1. The first step, we should determine what is blend mode match with texture. For simply, I create object filter as GPUImageNormalBlendFilter class. And call [filter useNextFrameForImageCapture] for static image processing.
 2. Convert UIImage object to GPUImagePicture
@@ -116,7 +123,7 @@ Here is snippet code for you
 
 If you are confuse about **step 1**, please read [this blog](http://www.sunsetlakesoftware.com/2014/03/17/switching-gpuimage-use-cached-framebuffers "Blog"), in the newest version GPUImage.
 
-Brad Larson changed the way for processing image because some memory structure issue, and make sure you MUST call -useNextFrameForImageCapture. If not, NSAsset will be fired.
+Brad Larson changed the way for processing image because some memory structure issue, and make sure you MUST call `-useNextFrameForImageCapture`. If not, NSAsset will be fired.
 
 
 # Note
@@ -133,9 +140,32 @@ In short, this video below will show you:
 
 Step 4 is just option step. When you finished step 3, I think you can understand enough to implement. But if you wanna gain more User Experience, we should animate photo when applying new filter.
 
-CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"contents"]; fadeOutAnimation.fromValue = (__bridge id) _previousImage; fadeOutAnimation.toValue = (id) destinationPhoto.CGImage; fadeOutAnimation.duration = 1.6f; fadeOutAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]; fadeOutAnimation.fillMode = kCAFillModeForwards; fadeOutAnimation.removedOnCompletion = NO; // Delegate FeBasicAnimationBlock *block = [[FeBasicAnimationBlock alloc] init]; block.blockDidStart = ^{ _tableView.userInteractionEnabled = NO; }; block.blockDidStop = ^{ _tableView.userInteractionEnabled = YES; _previousImage = destinationPhoto.CGImage; }; // Set delegate fadeOutAnimation.delegate = block; [_imageView.layer addAnimation:fadeOutAnimation forKey:@"aa"];
+```objc
+CABasicAnimation *fadeOutAnimation = [CABasicAnimation animationWithKeyPath:@"contents"];
+    fadeOutAnimation.fromValue = (__bridge id) _previousImage;
+    fadeOutAnimation.toValue = (id) destinationPhoto.CGImage;
+    fadeOutAnimation.duration = 1.6f;
+    fadeOutAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    fadeOutAnimation.fillMode = kCAFillModeForwards;
+    fadeOutAnimation.removedOnCompletion = NO;
+    
+    // Delegate
+    FeBasicAnimationBlock *block = [[FeBasicAnimationBlock alloc] init];
+    block.blockDidStart = ^{
+        _tableView.userInteractionEnabled = NO;
+    };
+    block.blockDidStop = ^{
+        _tableView.userInteractionEnabled = YES;
+        _previousImage = destinationPhoto.CGImage;
+    };
+    
+    // Set delegate
+    fadeOutAnimation.delegate = block;
+    
+    [_imageView.layer addAnimation:fadeOutAnimation forKey:@"aa"];
+```
 
-I created CABasicAnimation object and add to _imageView.layer. If you are familiar with CABasicAnimation, this is not problem for you. But not, I explain briefly.
+I created CABasicAnimation object and add to \_imageView.layer. If you are familiar with CABasicAnimation, this is not problem for you. But not, I explain briefly.
 
 1. Because I want to change Layer’s contents property, so I use CABasicAnimation instead of  [UIView animate…].
 2. FromValue is the previous Image
@@ -148,11 +178,9 @@ I created CABasicAnimation object and add to _imageView.layer. If you are famili
 Everything is done.  
 <iframe allowfullscreen="allowfullscreen" frameborder="0" height="415" src="//www.youtube.com/embed/8RetiD4N1IE" width="600"></iframe>
 
-
 # Project sample code
 
-[su_button url=”https://github.com/NghiaTranUIT/FilterMe-Texture” target=”blank” style=”flat” size=”6″ icon=”icon: cloud-download”]Github[/su_button]
-
+[Sample Code](https://github.com/NghiaTranUIT/FilterMe-Texture)
 
 # What I covered
 
