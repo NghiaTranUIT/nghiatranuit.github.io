@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Longest Common Subsequence Diff [Part 1]
-date: '2017-02-16 14:04:46'
+date: '2014-02-16 14:04:46'
 ---
 
 
