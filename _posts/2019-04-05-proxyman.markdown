@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Proxyman
+title: Proxyman - Modern and Delightful Web Debugging Proxy
 date: '2019-04-05 16:21:31'
 tags:
 - charles
@@ -12,7 +12,7 @@ tags:
 
 Hey guys,
 
-I’m so excited to introduce you Proxyman ([https://proxyman.io](https://proxyman.io)), a modern and intuitive HTTP Proxy app for macOS ♥️
+I’m so excited to introduce you Proxyman ([https://proxyman.io](https://proxyman.io)), Modern and Delightful Web Debugging Proxy for macOS ♥️
 
 Proxyman is still my best side project I’ve worked on ⚡️
 
