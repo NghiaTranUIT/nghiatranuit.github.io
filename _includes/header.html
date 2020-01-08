@@ -1,11 +1,8 @@
 <aside class="logo">
 
-	{% assign link = '/' %}
-
 	<a href="{{ link | prepend: site.baseurl | prepend: site.url }}">
 		<img src="{{ site.logo_url }}" class="logo-avatar">
 	</a>
-	<span class="logo-prompt code">{{ prompt }}</span>
 
 </aside>
 
@@ -14,9 +11,7 @@
 	<p></p>
 	<div>I write <a href="https://github.com/ProxymanApp/Proxyman">Proxyman</a> in spare time</div>
 	<p></p>
-    <a href="{{ link | prepend: site.baseurl }}" class="link">{{ prompt }}</a>
-    <span> • </span>
-    <a href="https://github.com/{{ site.github_username }}" title="" target="_blank" class="link">Side Projects</a>
+    <a href="{{ prepend: site.baseurl | prepend: site.url }}/about" title="" target="_blank" class="link">About me</a>
     <span> • </span>
     {% if site.github_username %}	
         <a href="https://github.com/{{ site.github_username }}" title="GitHub Profile" target="_blank" class="link">Github</a>
