@@ -153,7 +153,6 @@ iframe {
 }
 ul,
 ol {
-  margin: 40px 0;
   padding-left: 50px;
   li {
     word-wrap: break-word;
@@ -224,10 +223,13 @@ iframe {
 article {
   max-width: 800px;
   margin: 0 auto;
+      font-size: 1.125rem;
+    line-height: 1.82813rem;
+    margin-bottom: 1.82813rem;
   h1.title {
     line-height: 1.4em;
     text-align: center;
-    font-size: 1.4em;
+    font-size: 2em;
   }
   .divider {
     background: #ddd;
@@ -239,7 +241,7 @@ article {
   }
   .center {
     text-align: center;
-    margin: 0 auto;
+    margin: 40px auto;
   }
   hr {
     border: 0;
@@ -247,8 +249,6 @@ article {
     margin: 30px 0;
   }
   p {
-    font-size: 15px;
-    line-height: 1.9em;
     word-wrap: break-word;
   }
   .footnote {
@@ -288,7 +288,6 @@ article {
   text-align: center;
   a {
     text-decoration: none;
-    margin: 40px auto 0;
     display: inline-block;
     padding: 10px;
     border: 0;
@@ -369,4 +368,8 @@ section {
       }
     }
   }
+}
+
+#content {
+  margin: 80px auto;
 }
