@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Proxyman - Modern. Native. Web Debugging Proxy
-
+description: Proxyman - Modern and Native Web Debugging Proxy on macOS and M1
 date: '2021-09-20 21:06:00'
 tags:
 - macOS

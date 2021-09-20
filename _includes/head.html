@@ -8,7 +8,7 @@
 	<title>{{ site.title }}</title>
 {% endif %}
 
-<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+{% if page.description %}<meta name="description" content="{{ page.description }}">{% else %}<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">{% endif %}
 
 {% if site.google_verify %}
     <meta name="google-site-verification" content="{{ site.google_verify }}">

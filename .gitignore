@@ -4,6 +4,7 @@ _site/
 .vscode/
 
 .jekyll-cache/
+.jekyll-metadata
 
 # Windows image file caches
 Thumbs.db
