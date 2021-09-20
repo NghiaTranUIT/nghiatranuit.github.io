@@ -1,0 +1,61 @@
+I"@<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/Logo_512-300x300.jpg?resize=300%2C300" alt="Logo_512" /></p>
+
+<p>Hi everyone, finally, I’ve just released some stuffs.</p>
+
+<p>These customize controls and categories was inspired by Google Material Design.</p>
+
+<p>If you’ve not heard what Google Martial Design is. Please take a moment to review what is does.</p>
+
+<p>Here is useful link for you : <a href="https://www.google.com/design/spec/animation/responsive-interaction.html#responsive-interaction-surface-response" title="Google">Google Martial Design</a></p>
+
+<h1 id="google-material-design">Google Material Design</h1>
+
+<p>As you see, Martial Design cove many awesome thing for our. Include Animation, design, layout, pattern… It’s useful things for you as iOS developer.</p>
+
+<p>Do you recognize these animation is just for Android dev ? In the reusable world, everything android has, iOS should be too.</p>
+
+<h1 id="github">Github</h1>
+
+<p>If you need more further information or how to add it to your app.</p>
+
+<p>Feel free to download and reuse comfortable.</p>
+
+<p><a href="https://github.com/NghiaTranUIT/Responsive-Interaction-Control">Github</a></p>
+
+<h1 id="whats-inside">What’s inside</h1>
+
+<h3 id="uilabe--responsive-interaction-category">UILabe – Responsive Interaction Category</h3>
+
+<p>Just include <strong>UILabel+ResponsiveInteration</strong> category to your app.</p>
+
+<p>Call** [myLabel activeResponsiveInteraction]. <strong>Don’t need to subclass UILabel</strong>. One method for active or disable effect.</p>
+
+<p>When use touch or hover their finger, these UILabel will be lifted up, make they notice than more.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/UILabel_Responsive_Interaction.gif?resize=314%2C587" alt="UILabel_Responsive_Interaction" /> </p>
+
+<h3 id="uibutton-responsive-interaction-category">UIButton – Responsive Interaction Category</h3>
+
+<p>Very similar above, but these effect don’t affect Button’s Target-Action pattern.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/UIButton_Responsive_Interaction.gif?resize=314%2C587" alt="UIButton_Responsive_Interaction" /></p>
+
+<h3 id="radial-button">Radial Button</h3>
+
+<p>A subclass of UIButton. You can combine many button to one button.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/RadialButton.gif?resize=314%2C587" alt="RadialButton" /></p>
+
+<h3 id="ripple-button">Ripple Button</h3>
+
+<p>This control was inspired with Surface Reaction Effect by Google.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/RippleButton.gif?resize=314%2C587" alt="RippleButton" /></p>
+
+<h1 id="get-confused-about-technicalside-">Get confused about technical side ?</h1>
+
+<p>If you have any question about technical side, just drop your question below, I will reply you soon ;]</p>
+
+<p>Thank for using this.</p>
+
+:ET

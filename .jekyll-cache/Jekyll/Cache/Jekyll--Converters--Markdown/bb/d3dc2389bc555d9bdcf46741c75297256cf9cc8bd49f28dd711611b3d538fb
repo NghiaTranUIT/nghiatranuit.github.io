@@ -1,0 +1,109 @@
+I"#<p>Hi, We will pick up right where we left off in Part one</p>
+
+<p>In the last part, I covered to use curve file which was built by Photoshop, and how to apply it to your photo.</p>
+
+<p>And now, we will deal with advanced technique. Applying many complex curve and selective-color to turn your photo to beautiful photo ever.</p>
+
+<p>Standard approach to creating photo-like Instagram in last part. We just apply one curve to photo. So, what if do I wanna apply more curve or selective-color in photoshop? Should I apply each curve by step to step in iOS app? With professional designer, they can adjust more curve than one at the time.</p>
+
+<p>Here is list action which designer often do :</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_1.png?resize=281%2C611" alt="FilterMe_Part2_1" /></p>
+
+<p>Sounds simple enough, but in practice, I found it quite hard to implement Curves and Selective Color in my iOS app exactly the way Photoshop does it. That should be crazy if I and you as iOS developer will apply each step by code. There is must solution for an implement that.</p>
+
+<h1 id="color-lookup-table--lut">Color Lookup Table – LUT</h1>
+
+<p>LUT is a recuse for iOS dev ;]</p>
+
+<p>In the field of image processing, when we want to adjust the color of an image, often used Color Lookup Table (referred ColorLUT) technology.</p>
+
+<p>Here is a simple example, if we want to make the R-value of each pixel in the image into the original 0.3-fold, the basic approach is to put the R-value of each pixel is multiplied by 0.3, assuming the size of the image is 1024×768, then the total to 786,432 times a floating-point multiplication.</p>
+
+<p>If we start the first result to build a table, all the processed color values (R-value is 0.3 times) after recording it, and then take the color value of each pixel in the table, the color values obtained after processing, So long as we do 786432 lookup action, faster than many floating-point operations.In fact most of the color adjustment algorithms many complexes than this example, and therefore better highlight the high efficiency of the look-up table.</p>
+
+<p>Here’s a sample RGB lookup table:</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_2.png?resize=512%2C512" alt="FilterMe_Part2_2" /></p>
+
+<p>So, theory enough, take action.</p>
+
+<p>Open photoshop, load <a href="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/Filter-Me_sample.jpg" title="Sample">this photo</a>, and give it to your designer. They will make some adjustment to desired effect.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_3.png?resize=850%2C532" alt="FilterMe_Part2_3" /></p>
+
+<p>But now, we are an iOS dev, I take a tour around google and seek some action Photoshop.</p>
+
+<p>Here is my found: <a href="http://www.deviantart.com/art/ATP-Dylan-Action-for-Photoshop-461167798">http://www.deviantart.com/art/ATP-Dylan-Action-for-Photoshop-461167798</a></p>
+
+<p>You can find by yourself, but make sure: There is no effects use additional textures, blur, sharpen and some other filters which will not work with a simple lookup texture approach. Your action should just adjust curve, layer, selective-color.</p>
+
+<p>Download this action and run it.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_4.png?resize=338%2C309" alt="FilterMe_Part2_4" /> </p>
+
+<p>And here is my result</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_5.png?resize=850%2C531" alt="FilterMe_Part2_5" /> </p>
+
+<p>Look amazing ;]</p>
+
+<p>But this is work of a designer, my job is to bring this miracle to iOS app.</p>
+
+<p>Continue, Download <a href="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_OriginalLUT.png" title="Original LUT">original LUT</a></p>
+
+<p>Open this with photoshop, take actions like I did before to original LUT.</p>
+
+<p>And save LUT as ProcessedLUT.png (Must save as PNJ extension)</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_ProcessedLUT.png?resize=359%2C359" alt="FilterMe_Part2_ProcessedLUT" /></p>
+
+<p>So, we have finished the first stage as an important stage in this blog. Next, we work with iOS.</p>
+
+<p>For simple, I create a category for you. Feel free to download <a href="http://www.mediafire.com/download/7heho6i2pkd0pm7/CIFilter+LUT.zip" title="Category CIFilter+LUT">it here</a>.</p>
+
+<p>Ex:</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Load photo</span>
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">photo</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nf">imageNamed</span><span class="p">:</span><span class="s">@"Filter-Me_sample.jpg"</span><span class="p">];</span>
+    
+    <span class="c1">// Create filter</span>
+    <span class="n">CIFilter</span> <span class="o">*</span><span class="n">lutFilter</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIFilter</span> <span class="nf">filterWithLUT</span><span class="p">:</span><span class="s">@"FilterMe_Part2_ProcessedLUT"</span> <span class="nf">dimension</span><span class="p">:</span><span class="mi">64</span><span class="p">];</span>
+    
+    <span class="c1">// Set parameter</span>
+    <span class="n">CIImage</span> <span class="o">*</span><span class="n">ciImage</span> <span class="o">=</span> <span class="p">[[</span><span class="n">CIImage</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithImage</span><span class="p">:</span><span class="n">photo</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">lutFilter</span> <span class="nf">setValue</span><span class="p">:</span><span class="n">ciImage</span> <span class="nf">forKey</span><span class="p">:</span><span class="s">@"inputImage"</span><span class="p">];</span>
+    <span class="n">CIImage</span> <span class="o">*</span><span class="n">outputImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">lutFilter</span> <span class="nf">outputImage</span><span class="p">];</span>
+    
+    <span class="n">CIContext</span> <span class="o">*</span><span class="n">context</span> <span class="o">=</span> <span class="p">[</span><span class="n">CIContext</span> <span class="nf">contextWithOptions</span><span class="p">:[</span><span class="n">NSDictionary</span> <span class="nf">dictionaryWithObject</span><span class="p">:(</span><span class="n">__bridge</span> <span class="n">id</span><span class="p">)(</span><span class="n">CGColorSpaceCreateDeviceRGB</span><span class="p">())</span> <span class="nf">forKey</span><span class="p">:</span><span class="n">kCIContextWorkingColorSpace</span><span class="p">]];</span>
+    
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">newImage</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nf">imageWithCGImage</span><span class="p">:[</span><span class="n">context</span> <span class="nf">createCGImage</span><span class="p">:</span><span class="n">outputImage</span> <span class="nf">fromRect</span><span class="p">:</span><span class="n">outputImage</span><span class="p">.</span><span class="n">extent</span><span class="p">]];</span>
+    
+    <span class="n">_imageView</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">newImage</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Just remember to add CoreImage and OpenGLES framework in your project.</p>
+
+<p>Here is my photo after process by LUT</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FilterMe_Part2_6.png?resize=577%2C399" alt="FilterMe_Part2_6" /></p>
+
+<h1 id="another-way">Another way</h1>
+<p>You can easily implement LUT process in GPUImage. Just use <strong>GPUImageLookupFilter </strong>class.</p>
+
+<h1 id="source-code">Source code</h1>
+<p><a href="https://github.com/NghiaTranUIT/FilterMe_Part_2">Github</a></p>
+
+<h1 id="where-to-go-from-here-">Where to go from here ?</h1>
+
+<p>After reading carefully this blog, I think you have some knowledge about image processing and how to bring Photoshop to the iOS world.</p>
+
+<p>To make photo similar Instagram do, in the 3rd part, I will show you the way to add more texture to photo. Make it look like vintage or retro style.</p>
+
+<p>Thank for reading ;]</p>
+
+<p> </p>
+
+<p> </p>
+
+:ET

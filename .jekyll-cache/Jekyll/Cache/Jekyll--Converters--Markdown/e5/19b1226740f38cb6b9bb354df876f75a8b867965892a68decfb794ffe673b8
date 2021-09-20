@@ -1,0 +1,604 @@
+I"`�<p>It’s brand new series about filter on camera. Yeah, actually, it’s 4th blog i’ve written :D.</p>
+
+<p>So I sure there is question in your mind. Why only mention about filter camera ? Why don’t you write another things, such as algorithm or common mistake when developing app or anything else ?</p>
+
+<p>Yup, The answer is so simple, because i really love it :D, it makes worst things to better. poor photographer to professional, make everything see throught camera looks amazing 😀</p>
+
+<p>Here is achievement, please take a look to know what we will do next.</p>
+
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/qGRTbdT_qxs?feature=oembed" width="750"></iframe>
+
+<p>^ So, is it awesome :)), are you ready to implement it ?</p>
+
+<h2 id="gpuimage">GPUImage</h2>
+
+<p>On entire blog, we’ll deal with <a href="https://github.com/BradLarson/GPUImage" title="GPUImage">GPUImage</a>. Rather than being introduction to GPUImage, this blog assumes you are familiar with GPUImage, if not, just spent few mins and google. There is bunch of great articles talk about it, no reason to say again.</p>
+
+<p>And if you’re step-by-step guy. Please create new projec with your Xcode, and follow my instruction 😀</p>
+
+<h2 id="install-gpuimage-fromcocoapods">Install GPUImage from CocoaPods</h2>
+
+<p>Navigate to root of your project. Create Podfile with content below</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>platform :ios,'7.0' pod 'GPUImage', '~&gt; 0.1'
+</code></pre></div></div>
+
+<p>Open terminal, cd to project’s directory and run</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropfilter_1.png" alt="" /></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pod install
+</code></pre></div></div>
+
+<p>…… Leave it, pod will do all for you, Just go away or make couple of coffee for yourself.</p>
+
+<p>When it’s finished, we will see like this</p>
+
+<p>[<img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropfilter_2.png?resize=440%2C269" alt="dropfilter_2" />]</p>
+
+<p>and open your <strong>.DropFilter.xcworkspace</strong> instead of <strong>.xcodeproj</strong>.</p>
+
+<h2 id="write-simple-live-filter-camera">Write simple live filter camera</h2>
+
+<p>Before going deeply, we should build simple live filter camera first to understand clearly.</p>
+
+<p>Here is anatomy. We’re going to put GPUImageView on top of controller’s view.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_3.jpg?resize=525%2C424" alt="dropFilter_3" /></p>
+
+<p>GPUImageView is subclass of UIView, so it has useful UIView’s property. It just warps all of code to handle render data which come from camera or filter.</p>
+
+<p>Open storyboard and add UIView on root view controller, and add constrains. To guarantee camera screen will full-screen even on any device.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_4.png?resize=221%2C295" alt="dropFilter_4" /></p>
+
+<p>Switch to Identity Inspector and configure. Class is <strong>GPUImage</strong> and Label is <strong>Top Camera View</strong></p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_5.png?resize=244%2C310" alt="dropFilter_5" /></p>
+
+<p>It’s done with interface, we’re going to implement code.</p>
+
+<p>1 – Create new outlet from GPUImage with name <strong>topCameraImageView</strong>.</p>
+
+<p>2 – Added helper code in interface side.</p>
+
+<p>We use GPUImageStillCamera – subclass of GPUVideoCamera. By reuse it, we don’t have any pain when working directly with AVFoundation and OpenGL ES. Many thanks to BrandLarson.</p>
+
+<p>GPUImageGrayscaleFilter is just simple things to help us apply grayscale to camera easily.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// GPUImage View </span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">weak</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">IBOutlet</span> <span class="n">GPUImageView</span> <span class="o">*</span><span class="n">topCameraImageView</span><span class="p">;</span> 
+<span class="c1">// Still Camera </span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">GPUImageStillCamera</span> <span class="o">*</span><span class="n">stillCamera</span><span class="p">;</span> 
+<span class="c1">// Filter </span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">GPUImageGrayscaleFilter</span> <span class="o">*</span><span class="n">grayscaleFilter</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>3 – Configure them</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">viewDidLoad</span><span class="p">];</span>
+    <span class="c1">// Do any additional setup after loading the view, typically from a nib.</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">initCommon</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">configureCamera</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">configureFilter</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">configureImageView</span><span class="p">];</span>
+<span class="p">}</span>
+ 
+<span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">didReceiveMemoryWarning</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">didReceiveMemoryWarning</span><span class="p">];</span>
+    <span class="c1">// Dispose of any resources that can be recreated.</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="n">BOOL</span><span class="p">)</span> <span class="n">prefersStatusBarHidden</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">#pragma mark - Cycle view
+</span><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">viewWillAppear</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">animated</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">viewWillAppear</span><span class="p">:</span><span class="n">animated</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">_stillCamera</span> <span class="nf">startCameraCapture</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">viewWillDisappear</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">animated</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">viewWillDisappear</span><span class="p">:</span><span class="n">animated</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">_stillCamera</span> <span class="nf">stopCameraCapture</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="cp">#pragma mark - Init
+</span><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">initCommon</span>
+<span class="p">{</span>
+    
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">configureCamera</span>
+<span class="p">{</span>
+    <span class="c1">// Init Still camera</span>
+    <span class="n">_stillCamera</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImageStillCamera</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithSessionPreset</span><span class="p">:</span><span class="n">AVCaptureSessionPresetHigh</span> <span class="nf">cameraPosition</span><span class="p">:</span><span class="n">AVCaptureDevicePositionBack</span><span class="p">];</span>
+    <span class="n">_stillCamera</span><span class="p">.</span><span class="n">outputImageOrientation</span> <span class="o">=</span> <span class="n">UIInterfaceOrientationPortrait</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">configureFilter</span>
+<span class="p">{</span>
+    <span class="c1">// Gray filter</span>
+    <span class="n">_grayscaleFilter</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImageGrayscaleFilter</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">configureImageView</span>
+<span class="p">{</span>
+    <span class="c1">// Top</span>
+    <span class="p">[</span><span class="n">_stillCamera</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">_grayscaleFilter</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">_grayscaleFilter</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">_topCameraImageView</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>^ as you read, it’s pretty straightforward. We created instance of camera with hight quality, back camera and Portrait mode as default.</p>
+
+<p>Here is flow of raw data in app. GPUImageStillCamera gets raw data from camera and sent to sub-filter to process it. Otherwise, GPUImage implement by Decorator Pattern. It means you could add many filters as you expect.</p>
+
+<p>Finally, just send processed data to GPUImageView, and it will be present on screen.</p>
+
+<p><img src="https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/04/dropFilter_9.jpg?resize=634%2C229" alt="dropFilter_9" /></p>
+
+<p>So, Build and run on your iphone, here is result what we did.</p>
+
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/hDPb1HE-yeI?feature=oembed" width="750"></iframe>
+
+<h2 id="two-live-filters">Two live filters</h2>
+
+<p>We’re moving to harder part in this blog. From now, we will apply two live filters to camera at same time. It’s said One picture than million words. I prepared some useful photos to explain.</p>
+
+<p>Flow of data : Instead of using one flow, currently, we use 2 flows. One for GrayScaleFilter, one for AmatorkaFilter. All of them will process and send to Top/BottomImageView and present on screen simultaneously.</p>
+
+<p>I admit it costs x 2 CPU/GPU than one filter. But it isn’t problem now, 4S iphone still has enough power to show it fluently, around 30FPS. I benchmarked it, trust me 😀</p>
+
+<p><img src="https://i2.wp.com/128.199.214.43/wp-content/uploads/2015/04/dropFilter_11.jpg?resize=850%2C207" alt="dropFilter_11" />]</p>
+
+<p>And here is view hierarchy. We create new GPUImageView ( call as bottomImageView), and maskLayer.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_12.jpg?resize=633%2C451" alt="dropFilter_12" /></p>
+
+<p>Mask Layer is just CALayer with frame = { 0 , 0 , width / 2 , height }, and assign to topImageView’s layer. By using it as mask of TopImageView, the mask will hide the portion of the original layer. So we could see bottomImageView.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_13.jpg?resize=788%2C448" alt="dropFilter_13" /></p>
+
+<p>Theory is enough, time to implement it by your hand.</p>
+
+<p>1 – Open storyboard, add new UIView (call as <strong>bottomImageView</strong>, subclass from <strong>GPUImageView</strong>), and below TopImageView.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_14.jpg?resize=311%2C258" alt="dropFilter_14" /></p>
+
+<p>2 – Open viewcontroller.m and add it as outlet, new mask Layer and new filter.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// GPUImage View</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">weak</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">IBOutlet</span> <span class="n">GPUImageView</span> <span class="o">*</span><span class="n">bottomCameraView</span><span class="p">;</span>
+ 
+<span class="c1">// Filter</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">GPUImageAmatorkaFilter</span> <span class="o">*</span><span class="n">amatorkaFilter</span><span class="p">;</span>
+ 
+<span class="c1">// Mask</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">CALayer</span> <span class="o">*</span><span class="n">maskLayer</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Finally, we change implement section with new code.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewDidLoad</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">super</span> <span class="nf">viewDidLoad</span><span class="p">];</span>
+    <span class="c1">// Do any additional setup after loading the view, typically from a nib.</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">initCommon</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">configureCamera</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">configureFilter</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">configureImageView</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">self</span> <span class="nf">initMask</span><span class="p">];</span>
+<span class="p">}</span>
+ 
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">configureFilter</span>
+<span class="p">{</span>
+    <span class="c1">// Gray filter</span>
+    <span class="n">_grayscaleFilter</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImageGrayscaleFilter</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+    
+    <span class="c1">// Amatorka filter</span>
+    <span class="n">_amatorkaFilter</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImageAmatorkaFilter</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">configureImageView</span>
+<span class="p">{</span>
+    <span class="c1">// Top</span>
+    <span class="p">[</span><span class="n">_stillCamera</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">_grayscaleFilter</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">_grayscaleFilter</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">_topCameraImageView</span><span class="p">];</span>
+    
+    <span class="c1">// Botom</span>
+    <span class="p">[</span><span class="n">_stillCamera</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">_amatorkaFilter</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">_amatorkaFilter</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">_bottomCameraView</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">initMask</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_maskLayer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_maskLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CALayer</span> <span class="nf">layer</span><span class="p">];</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">whiteColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span>
+        
+        <span class="c1">// Add</span>
+        <span class="n">_topCameraImageView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">_maskLayer</span><span class="p">;</span>
+        <span class="n">_topCameraImageView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">masksToBounds</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In configureFilter, we initial GPUImageAmatorkaFilter. In configureImageView, still initial bottomImageView. Please notice we should assign <code class="language-plaintext highlighter-rouge">_amatorkaFilter</code> as <code class="language-plaintext highlighter-rouge">_camera’s target</code>, and bottomImagView is amatorkaFilter’s target.</p>
+
+<p>Magic happens in initMask method. We created new CALayer and assign it into <code class="language-plaintext highlighter-rouge">_topCamraImageView’s layer</code>.
+Because Top/Bottom ImageView is same frame, it’s just overlay, two filter is rendered simultaneously, so people can’t notice the magic inside.</p>
+
+<p>It works as our expectation 😀</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_15.jpg?resize=639%2C547" alt="dropFilter_15" /></p>
+
+<p>On action</p>
+
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/DnQIbRQJ0bc?feature=oembed" width="750"></iframe>
+
+<h2 id="make-its-better">Make it’s better</h2>
+
+<p>So, if you passed two section above, i guarantee you’re understand what i’m doing. But we shouldn’t release app with only noob feature. We should think and improve it professionally …..</p>
+
+<p>I’m thinking about “What happen if we could experience or preview filters by our finger ?” and ” Instead of rectangle, should we try another shape in mask layer ? ”</p>
+
+<p>Yeah, be inde-dev, we should ask ourself with those similar question. Each unique feature will attract people. Think difference is key of success.</p>
+
+<p><strong>1 – Triangle mask</strong><br />
+ I don’t prefer rectangle mask anymore, try triangle instead 😀 .So replace your initMask with new one.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">initMask</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_maskLayer</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">CGFloat</span> <span class="n">width</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">height</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+        
+        <span class="n">_maskLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAShapeLayer</span> <span class="nf">layer</span><span class="p">];</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">clearColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span>
+        
+        <span class="c1">// Bezier path</span>
+        <span class="n">UIBezierPath</span> <span class="o">*</span><span class="n">triangle</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIBezierPath</span> <span class="nf">bezierPath</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">triangle</span> <span class="nf">moveToPoint</span><span class="p">:</span><span class="n">CGPointZero</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">triangle</span> <span class="nf">addLineToPoint</span><span class="p">:</span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="mi">0</span><span class="p">)];</span>
+        <span class="p">[</span><span class="n">triangle</span> <span class="nf">addLineToPoint</span><span class="p">:</span><span class="n">CGPointMake</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">height</span><span class="p">)];</span>
+        <span class="p">[</span><span class="n">triangle</span> <span class="nf">addLineToPoint</span><span class="p">:</span><span class="n">CGPointMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)];</span>
+        <span class="p">[</span><span class="n">triangle</span> <span class="nf">addLineToPoint</span><span class="p">:</span><span class="n">CGPointZero</span><span class="p">];</span>
+        
+        <span class="c1">// Add to mask layer</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">triangle</span><span class="p">.</span><span class="n">CGPath</span><span class="p">;</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">fillColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">whiteColor</span><span class="p">].</span><span class="n">CGColor</span><span class="p">;</span>
+        
+        <span class="c1">// Translate to center</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">anchorPoint</span> <span class="o">=</span> <span class="n">CGPointZero</span><span class="p">;</span>
+        <span class="n">_maskLayer</span><span class="p">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span> <span class="o">-</span> <span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        
+        <span class="c1">// Add</span>
+        <span class="n">_topCameraImageView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">_maskLayer</span><span class="p">;</span>
+        <span class="n">_topCameraImageView</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">masksToBounds</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_16.jpg?resize=303%2C539" alt="dropFilter_16" /></p>
+
+<p><strong>2 – User’s gesture</strong><br />
+ As i said before, i wanna use my finger to preview filter as i want. it’ll be unique experience :D. Let add <strong>UIPanGestureRecognize </strong>and <strong>FeBasicAnimationBlock</strong> (helper for warping CABasicAnimation’s delegate to block)</p>
+
+<p><strong>FeBasicAnimationBlock.h</strong></p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#import &lt;Foundation/Foundation.h&gt;
+#import &lt;QuartzCore/QuartzCore.h&gt;
+</span> 
+<span class="k">typedef</span> <span class="nf">void</span> <span class="p">(</span><span class="o">^</span><span class="n">FeBasicAnimationDidStartBlock</span><span class="p">)();</span>
+<span class="k">typedef</span> <span class="nf">void</span> <span class="p">(</span><span class="o">^</span><span class="n">FeBasicAnimationDidStopBlock</span><span class="p">)();</span>
+ 
+<span class="k">@interface</span> <span class="nc">FeBasicAnimationBlock</span> <span class="p">:</span> <span class="nc">NSObject</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">FeBasicAnimationDidStartBlock</span> <span class="n">blockDidStart</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">copy</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">FeBasicAnimationDidStopBlock</span> <span class="n">blockDidStop</span><span class="p">;</span>
+ 
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">animationDidStart</span><span class="p">:(</span><span class="n">CAAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span><span class="p">;</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">animationDidStop</span><span class="p">:(</span><span class="n">CAAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span> <span class="nf">finished</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">flag</span><span class="p">;</span>
+<span class="k">@end</span>
+</code></pre></div></div>
+
+<p><strong>FeBasicAnimationBlock.m</strong></p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#import "FeBasicAnimationBlock.h"
+</span> 
+<span class="k">@implementation</span> <span class="nc">FeBasicAnimationBlock</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">animationDidStart</span><span class="p">:(</span><span class="n">CAAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_blockDidStart</span><span class="p">)</span>
+        <span class="n">_blockDidStart</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">animationDidStop</span><span class="p">:(</span><span class="n">CAAnimation</span> <span class="o">*</span><span class="p">)</span><span class="nv">anim</span> <span class="nf">finished</span><span class="p">:(</span><span class="n">BOOL</span><span class="p">)</span><span class="nv">flag</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">_blockDidStop</span><span class="p">)</span>
+        <span class="n">_blockDidStop</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">@end</span>
+</code></pre></div></div>
+
+<p>Switch back to ViewController.m</p>
+
+<p>Add PanGesture into @interface</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Gesture
+@property (strong, nonatomic) UIPanGestureRecognizer *panGesture;
+</code></pre></div></div>
+
+<p>And few new API</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">initGesture</span>
+<span class="p">{</span>
+    <span class="n">_panGesture</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIPanGestureRecognizer</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithTarget</span><span class="p">:</span><span class="n">self</span> <span class="nf">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">handlePanGesture</span><span class="o">:</span><span class="p">)];</span>
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nf">addGestureRecognizer</span><span class="p">:</span><span class="n">_panGesture</span><span class="p">];</span>
+    
+    <span class="n">self</span><span class="p">.</span><span class="n">topCameraImageView</span><span class="p">.</span><span class="n">userInteractionEnabled</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">bottomCameraView</span><span class="p">.</span><span class="n">userInteractionEnabled</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">handlePanGesture</span><span class="p">:(</span><span class="n">UIPanGestureRecognizer</span> <span class="o">*</span><span class="p">)</span> <span class="n">sender</span>
+<span class="p">{</span>
+    <span class="n">CGPoint</span> <span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">sender</span> <span class="nf">locationInView</span><span class="p">:</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+    
+    <span class="k">switch</span> <span class="p">(</span><span class="n">sender</span><span class="p">.</span><span class="n">state</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="n">UIGestureRecognizerStateBegan</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">UIGestureRecognizerStateChanged</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="c1">// Translate maskLayer</span>
+            <span class="c1">// We should disable Implecit Animation when assign directly to property of layer</span>
+ 
+            <span class="n">CGFloat</span> <span class="n">percent</span> <span class="o">=</span> <span class="n">location</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+            
+            <span class="p">[</span><span class="n">self</span> <span class="nf">setPositionWithoutImplicitAnimationAtTransfrom</span><span class="p">:</span><span class="n">CATransform3DMakeTranslation</span> <span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">percent</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)];</span>
+            
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="n">UIGestureRecognizerStateCancelled</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">UIGestureRecognizerStateFailed</span><span class="p">:</span>
+        <span class="k">case</span> <span class="n">UIGestureRecognizerStateEnded</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="n">CATransform3D</span> <span class="n">transfrom</span> <span class="o">=</span> <span class="n">_maskLayer</span><span class="p">.</span><span class="n">transform</span><span class="p">;</span>
+            
+            <span class="c1">// m41 is x corrdinatation</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">transfrom</span><span class="p">.</span><span class="n">m41</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">// Animate masklayer to right edge</span>
+                <span class="p">[</span><span class="n">self</span> <span class="nf">animationMaskLayerToTransform</span><span class="p">:</span><span class="n">CATransform3DMakeTranslation</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)];</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="c1">// Animate masklayer to left edge</span>
+                <span class="p">[</span><span class="n">self</span> <span class="nf">animationMaskLayerToTransform</span><span class="p">:</span><span class="n">CATransform3DMakeTranslation</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)];</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nl">default:</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+ 
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">animationMaskLayerToTransform</span><span class="p">:(</span><span class="n">CATransform3D</span><span class="p">)</span> <span class="n">finalTransform</span>
+<span class="p">{</span>
+    <span class="n">CABasicAnimation</span> <span class="o">*</span><span class="n">transalteAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">CABasicAnimation</span> <span class="nf">animationWithKeyPath</span><span class="p">:</span><span class="s">@"transform"</span><span class="p">];</span>
+    <span class="n">transalteAnimation</span><span class="p">.</span><span class="n">toValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">id</span><span class="p">)[</span><span class="n">NSValue</span> <span class="nf">valueWithCATransform3D</span><span class="p">:</span><span class="n">finalTransform</span><span class="p">];</span>
+    <span class="n">transalteAnimation</span><span class="p">.</span><span class="n">duration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">3</span><span class="n">f</span><span class="p">;</span>
+    <span class="n">transalteAnimation</span><span class="p">.</span><span class="n">timingFunction</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAMediaTimingFunction</span> <span class="nf">functionWithName</span><span class="p">:</span><span class="n">kCAMediaTimingFunctionEaseOut</span><span class="p">];</span>
+    <span class="n">transalteAnimation</span><span class="p">.</span><span class="n">removedOnCompletion</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+    <span class="n">transalteAnimation</span><span class="p">.</span><span class="n">fillMode</span> <span class="o">=</span> <span class="n">kCAFillModeForwards</span><span class="p">;</span>
+    
+    <span class="c1">// Delegate</span>
+    <span class="n">FeBasicAnimationBlock</span> <span class="o">*</span><span class="n">blockDelegate</span> <span class="o">=</span> <span class="p">[</span><span class="n">FeBasicAnimationBlock</span> <span class="nf">new</span><span class="p">];</span>
+    <span class="n">transalteAnimation</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">blockDelegate</span><span class="p">;</span>
+    
+    <span class="n">__weak</span> <span class="n">typeof</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">weakSelf</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
+    <span class="n">blockDelegate</span><span class="p">.</span><span class="n">blockDidStart</span> <span class="o">=</span> <span class="o">^</span><span class="p">{</span>
+        <span class="n">typeof</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">strongSelf</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">;</span>
+        
+        <span class="c1">// Disable gesture</span>
+        <span class="n">strongSelf</span><span class="p">.</span><span class="n">panGesture</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">blockDelegate</span><span class="p">.</span><span class="n">blockDidStop</span> <span class="o">=</span> <span class="o">^</span><span class="p">{</span>
+        <span class="n">typeof</span><span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="n">strongSelf</span> <span class="o">=</span> <span class="n">weakSelf</span><span class="p">;</span>
+        
+        <span class="c1">// Enable</span>
+        <span class="n">strongSelf</span><span class="p">.</span><span class="n">panGesture</span><span class="p">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+        
+        <span class="c1">// remove</span>
+        <span class="p">[</span><span class="n">strongSelf</span><span class="p">.</span><span class="n">maskLayer</span> <span class="nf">removeAllAnimations</span><span class="p">];</span>
+        
+        <span class="c1">// Set final</span>
+        <span class="p">[</span><span class="n">strongSelf</span> <span class="nf">setPositionWithoutImplicitAnimationAtTransfrom</span><span class="p">:</span><span class="n">finalTransform</span><span class="p">];</span>
+    <span class="p">};</span>
+    
+    <span class="p">[</span><span class="n">_maskLayer</span> <span class="nf">addAnimation</span><span class="p">:</span><span class="n">transalteAnimation</span> <span class="nf">forKey</span><span class="p">:</span><span class="s">@"animation"</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">setPositionWithoutImplicitAnimationAtTransfrom</span><span class="p">:(</span><span class="n">CATransform3D</span> <span class="p">)</span> <span class="n">transform</span>
+<span class="p">{</span>
+    <span class="p">[</span><span class="n">CATransaction</span> <span class="nf">begin</span><span class="p">];</span>
+    
+    <span class="c1">// Disable</span>
+    <span class="p">[</span><span class="n">CATransaction</span> <span class="nf">setDisableActions</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+    
+    <span class="c1">// Point</span>
+    <span class="n">_maskLayer</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span><span class="p">;</span>
+    
+    <span class="p">[</span><span class="n">CATransaction</span> <span class="nf">commit</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Finally, Run on your iphone, and preview live filter with your finger 😀</p>
+
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/0f3xzTNwRgE?feature=oembed" width="750"></iframe>
+
+<h2 id="filter-name">Filter name</h2>
+
+<p>It would be great if we add some filter name label in each side. Of course, it must be translate depend on your finger. So we should implement some helper API, to calculator center of cross line.</p>
+
+<p>Yeah, to achieve it, time to get your notebook and pencil to come back to high school.<br />
+ Sin, cos,tan,cotan are waiting you 😀</p>
+
+<p>It’s easy to understand what i wrote. The final answer is find position of O point. It’s center of cross line.</p>
+
+<p><a href="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_17-e1428221741695.jpg"><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2015/04/dropFilter_17-e1428221741695.jpg?resize=750%2C500" alt="dropFilter_17" /></a></p>
+
+<p>Add two label into @interface</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Label</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">UILabel</span> <span class="o">*</span><span class="n">grayscaleLbl</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">strong</span><span class="p">,</span> <span class="n">nonatomic</span><span class="p">)</span> <span class="n">UILabel</span> <span class="o">*</span><span class="n">amatorkarLbl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Initial two labels</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="n">initLabels</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_grayscaleLbl</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_grayscaleLbl</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@"Oldboy"</span><span class="p">;</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nf">fontWithName</span><span class="p">:</span><span class="s">@"HelveticaNeue-Light"</span> <span class="nf">size</span><span class="p">:</span><span class="mi">60</span><span class="p">];</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">whiteColor</span><span class="p">];</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">clearColor</span><span class="p">];</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">textAlignment</span> <span class="o">=</span> <span class="n">NSTextAlignmentCenter</span><span class="p">;</span>
+        
+        <span class="p">[</span><span class="n">_grayscaleLbl</span> <span class="nf">sizeToFit</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">_amatorkarLbl</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_amatorkarLbl</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UILabel</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">@"Retro"</span><span class="p">;</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">font</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIFont</span> <span class="nf">fontWithName</span><span class="p">:</span><span class="s">@"HelveticaNeue-Light"</span> <span class="nf">size</span><span class="p">:</span><span class="mi">60</span><span class="p">];</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">textColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">whiteColor</span><span class="p">];</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">clearColor</span><span class="p">];</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">textAlignment</span> <span class="o">=</span> <span class="n">NSTextAlignmentCenter</span><span class="p">;</span>
+        
+        <span class="p">[</span><span class="n">_amatorkarLbl</span> <span class="nf">sizeToFit</span><span class="p">];</span>
+    <span class="p">}</span>
+    
+    <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nf">addSubview</span><span class="p">:</span><span class="n">_grayscaleLbl</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nf">addSubview</span><span class="p">:</span><span class="n">_amatorkarLbl</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Add 2 line of code in next of UIGestureRecognizerStateChanged.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Calculate O depend on maskLayer's transform</span>
+<span class="n">CGPoint</span> <span class="n">center</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nf">centerPointerDependTransform</span><span class="p">:</span><span class="n">_maskLayer</span><span class="p">.</span><span class="n">transform</span><span class="p">];</span>
+ 
+<span class="c1">// Set position of two labels     </span>
+<span class="p">[</span><span class="n">self</span> <span class="nf">setLabelsWithCenter</span><span class="p">:</span><span class="n">center</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>And here is the math.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span><span class="p">(</span><span class="n">CGPoint</span><span class="p">)</span> <span class="nf">centerPointerDependTransform</span><span class="p">:(</span><span class="n">CATransform3D</span><span class="p">)</span> <span class="n">transform</span>
+<span class="p">{</span>
+    <span class="c1">// Translate lable</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">m41</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">CGFloat</span> <span class="n">width</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+        
+        <span class="n">CGFloat</span> <span class="n">GA</span> <span class="o">=</span> <span class="n">transform</span><span class="p">.</span><span class="n">m41</span> <span class="o">-</span> <span class="n">width</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">AC</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="n">GA</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">AB</span> <span class="o">=</span> <span class="n">AC</span> <span class="o">/</span> <span class="n">cos</span><span class="p">(</span><span class="n">alphaAngel</span><span class="p">);</span>
+        
+        <span class="n">CGFloat</span> <span class="n">AO</span> <span class="o">=</span> <span class="n">AB</span> <span class="o">/</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">y</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">alphaAngel</span><span class="p">)</span> <span class="o">*</span> <span class="n">AO</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">x</span> <span class="o">=</span> <span class="n">GA</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">alphaAngel</span><span class="p">)</span> <span class="o">*</span> <span class="n">AO</span><span class="p">;</span>
+    
+        <span class="k">return</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">CGFloat</span> <span class="n">height</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">;</span>
+        
+        <span class="n">CGFloat</span> <span class="n">DB</span> <span class="o">=</span>  <span class="n">transform</span><span class="p">.</span><span class="n">m41</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">belta</span> <span class="o">=</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">alphaAngel</span><span class="p">;</span>
+        
+        <span class="n">CGFloat</span> <span class="n">AB</span> <span class="o">=</span> <span class="n">DB</span> <span class="o">/</span> <span class="n">sin</span><span class="p">(</span><span class="n">belta</span><span class="p">);</span>
+        
+        <span class="n">CGFloat</span> <span class="n">AO</span> <span class="o">=</span> <span class="n">AB</span> <span class="o">/</span> <span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">x</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">belta</span><span class="p">)</span> <span class="o">*</span> <span class="n">AO</span><span class="p">;</span>
+        <span class="n">CGFloat</span> <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">height</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">belta</span><span class="p">)</span> <span class="o">*</span> <span class="n">AB</span><span class="p">)</span> <span class="o">+</span> <span class="n">cos</span><span class="p">(</span><span class="n">belta</span><span class="p">)</span> <span class="o">*</span> <span class="n">AO</span><span class="p">;</span>
+        
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"DB = %.2f"</span><span class="p">,</span><span class="n">DB</span><span class="p">);</span>
+        
+        <span class="k">return</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">CGPointZero</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>and</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="nf">setLabelsWithCenter</span><span class="p">:(</span><span class="n">CGPoint</span><span class="p">)</span> <span class="n">center</span>
+<span class="p">{</span>
+    <span class="c1">// Set center</span>
+    <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+    <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="n">center</span><span class="p">;</span>
+    
+    <span class="c1">// Rotate</span>
+    <span class="n">CATransform3D</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">CATransform3DIdentity</span><span class="p">;</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">CATransform3DTranslate</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">CATransform3DRotate</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">alphaAngel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    
+    <span class="n">CATransform3D</span> <span class="n">t2</span> <span class="o">=</span> <span class="n">CATransform3DIdentity</span><span class="p">;</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">CATransform3DTranslate</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">CATransform3DRotate</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">alphaAngel</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    
+    <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+    <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">layer</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">t2</span><span class="p">;</span>
+    
+    <span class="c1">// Alpha</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">center</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        
+        <span class="n">CGFloat</span> <span class="n">GA</span> <span class="o">=</span> <span class="n">_maskLayer</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">m41</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">GA</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">);</span>
+        
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">_amatorkarLbl</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        
+        <span class="n">CGFloat</span> <span class="n">GA</span> <span class="o">=</span> <span class="n">_maskLayer</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">m41</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">;</span>
+        <span class="n">GA</span> <span class="o">=</span> <span class="n">fabs</span><span class="p">(</span><span class="n">GA</span><span class="p">);</span>
+        <span class="n">_grayscaleLbl</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">GA</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>On action</p>
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/qGRTbdT_qxs?feature=oembed" width="750"></iframe>
+
+<h2 id="whats-next-">What’s next ?</h2>
+
+<p>“That’s one small step for you, one giant leap for your career” – Hear similar with Neli Armstrong’s quote when he was putting step in moon  😀 ? Yup, All we did is just is small steps, we if we understand clearly, we could build awesome live filter by your-self 😀</p>
+
+<p>Many things to improve, complex instagram filter and swipe to preview many live filters in camera view 😀 Here is achievements i’ve done for 1 months 😀</p>
+
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="563" src="https://www.youtube.com/embed/lNbbB9zqBOI?feature=oembed" width="750"></iframe>
+
+<p>Thanks for reading 😀
+<a href="https://github.com/NghiaTranUIT/DropFilter">Download Github</a></p>
+:ET

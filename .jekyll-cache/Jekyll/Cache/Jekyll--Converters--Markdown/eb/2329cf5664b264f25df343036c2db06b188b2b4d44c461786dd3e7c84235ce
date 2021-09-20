@@ -1,0 +1,36 @@
+I"V<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/06/FeSlideFilter_icon-e1403680938441-300x300.jpg?resize=300%2C300" alt="FeSlideFilter_icon" /></p>
+
+<h1 id="fe-slide-filter-view">Fe Slide Filter View</h1>
+
+<p>Hi everybody as an iOS developer like me ;]</p>
+
+<p>I have just released my customize control in <a href="https://github.com/NghiaTranUIT/FeSlideFilter">GitHub</a>.</p>
+
+<p>Here video as sample :</p>
+<iframe allowfullscreen="allowfullscreen" frameborder="0" height="615" src="//www.youtube.com/embed/KUN6bs9pl74" width="820"></iframe>
+
+<h1 id="technical">Technical</h1>
+
+<p>FeSlideFilter was build on top UIView. I combine UIScrollView with paging for title filter, and Mask layer technique. Here is what’s going on:</p>
+
+<ul>
+  <li>Subclass UIView</li>
+  <li>Using UIScrollView with paging for title filter</li>
+  <li>Using LUT filter technique for apply effect to photo</li>
+  <li>Conform UIScrollViewDelegate for interactive control – slide filter by your touch.</li>
+  <li>Using Layer’s mask technique for implementing two-side previewer.</li>
+  <li>Provide own delegate and datasource.</li>
+</ul>
+
+<h1 id="license">License</h1>
+
+<p>FeSlideFilterView is under MIT license.</p>
+
+<p>Feel free to do whatever you like ;]</p>
+
+<p>If you use my control in your app, jut please tell me know.</p>
+
+<h1 id="question--answer">Question &amp; Answer</h1>
+
+<p>I’m very glad if you drop a comment and discuss about this control. If something you don’t understand after taking a deep surgery about my control. Give me question, and I will reply soon.</p>
+:ET

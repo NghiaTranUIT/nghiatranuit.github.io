@@ -1,0 +1,185 @@
+I"/><p>In two previous parts of Filter Me series tutorial, I covered some useful technique for applying a filter to photo. Here is a shortcut for you: <a href="http://nghiatran.me/index.php/filter-me-tone-curve-part-1/" title="Part 1">Part 1</a> and <a href="http://nghiatran.me/index.php/filter-me-color-lookup-table-part-2/" title="Part 2">Part 2</a>.</p>
+
+<p>If you a new guy, I strongly recommend you should spend couple hours for reading Part 1 and part 2, and ensure you have some knowledge about Core Image and GPUImage before continue.</p>
+
+<h1 id="before-reading">Before reading</h1>
+
+<p>In this blog, I use GPUImage in entity project. Rather than being an introduction to the GPUImage framework, I assume you are familiar with the basics and focused on the way to implement filter function like Instagram does.</p>
+
+<p>For saving your time, I google some nice blog about GPUImage :</p>
+
+<ul>
+  <li><a href="https://github.com/BradLarson/GPUImage" title="GPUImage">GPUImage</a> by Brad Larson</li>
+  <li><a href="http://code.tutsplus.com/tutorials/build-a-photo-app-with-gpuimage--mobile-12223" title="Build a Photo App">Build a Photo App with GPUImage </a>by Mark Hammonds</li>
+  <li><a href="http://www.theappguruz.com/tutorial/ios-image-processsing-using-gpuimage-framework/" title="Image Processing using GPUImage">Image Processing using GPUImage</a> by Swati Choksi.</li>
+</ul>
+
+<h1 id="what-next">What next?</h1>
+
+<p>To create an app like Instagram’s filters, I will cover everything we need to implement it, including apply texture and adjust blend mode into the photo.</p>
+
+<p>In brief, what we will do, I have shown you a gallery of photos I did in a hour ago.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_9.jpg?resize=640%2C640&amp;ssl=1" alt="" /></p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_8.jpg?resize=640%2C640&amp;ssl=1" alt="" /></p>
+
+<p>Steps to do:</p>
+
+<ol>
+  <li>Download vintage texture brush from Google</li>
+  <li>Using Photoshop and create your own texture ( by combining brush and blend mode)</li>
+  <li>Apply this texture to your photo by using GPUImage.</li>
+  <li>Refactor code, bring animation for transiting photo.</li>
+</ol>
+
+<p>The first photo is an original photo. As you see, each next photo has a different style, by adding textures like grunge, you can turn your photo like Retro, Vintage style.</p>
+
+<h1 id="step-1--prepare-yourself">Step 1 – Prepare yourself</h1>
+
+<p>Before starting work, We should download awesome brush for vintage style in google. Here is what I find <a href="http://speckyboy.com/2012/02/20/20-subtle-and-soft-textured-photoshop-brush-packs-225-brushes/" title="Awesome brush">bursh</a>.</p>
+
+<p>Download what you want, and run it.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_1.png?resize=410%2C54" alt="FilterMe_Part3_1" /></p>
+
+<h1 id="step-2--photoshop-is-god">Step 2 – Photoshop is God</h1>
+
+<p>And open Photoshop app and create a new canvas with 640px as width and height.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/Screen-Shot-2014-07-06-at-13.24.49.png?resize=607%2C425" alt="FilterMe_Part3_2" /></p>
+
+<p>Ensure you choose Color Mode is RGB Color, not CMYK.</p>
+
+<p>Drag this <a href="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/originalPhoto.jpg" title="Original Photo">original photo</a> to your canvas, and create new layer for your texture</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_4.png?resize=201%2C121" alt="FilterMe_Part3_4" /></p>
+
+<p>Next, open your brush. As you see, there are many brush texture in your gallery</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_5.png?resize=442%2C419" alt="FilterMe_Part3_5" /></p>
+
+<p>Pick one, adjust a size and draw to photo whatever you like. If you want to improve brush’s effect, you can choose blend mode in the Layer panel.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/FilterMe_Part3_SlideShow_3.jpg?resize=640%2C640" alt="FilterMe_Part3_SlideShow_3" /></p>
+
+<p>Above photo is the result when I combine brush which I downloaded from the Internet with<strong> Blend mode is Linear Burn.</strong></p>
+
+<p>Feel free for adjusting option before saving.</p>
+
+<h2 id="save-your-texture">Save your texture</h2>
+
+<p>You must save your texture as PNG, and make sure you just turn “the eye” of texture layer. Turn off “the eye” of the original photo.</p>
+
+<p><img src="https://raw.githubusercontent.com/NghiaTranUIT/nghiatranuit.github.io/master/resources/2014/07/texture_linearBurnBlend_1-300x300.png?resize=300%2C300" alt="texture_linearBurnBlend_1" /> </p>
+
+<p>Bunch of texture which I have created and collected for you.</p>
+
+<p><a href="https://github.com/NghiaTranUIT/FilterMe-Texture">Textures</a></p>
+
+<h1 id="step-3--gpuimage">Step 3 – GPUImage</h1>
+
+<p>Now is a time we turn miracle to your app. Just drink a sip coffee and see what will happen next ;]</p>
+
+<p>Instead of talking about overview GPUImage framework again, I will mention directly what is inside GPUImage we should deal with it.</p>
+
+<p>The GPUImage library provides plenty of useful classes for blending texture with the photo. Such as <strong>GPUImageNormalBlendFilter</strong> for normal blend, <strong>GPUImageOverlayBlendFilter</strong> for overlay blend, <strong>GPUImageMultiplyBlendFilter</strong> for multiply blend and so on. All of them is subclass by GPUImageTwoInputFilter class.</p>
+
+<p>Here is snippet code for you</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">GPUImageNormalBlendFilter</span>  <span class="o">*</span><span class="n">filter</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImageNormalBlendFilter</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">filter</span> <span class="nf">useNextFrameForImageCapture</span><span class="p">];</span> <span class="c1">// 1</span>
+ 
+    <span class="c1">// 2</span>
+    <span class="c1">// GPUImage picture</span>
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">imageOriginal</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nf">imageNamed</span><span class="p">:</span><span class="s">@"originalPhoto.jpg"</span><span class="p">];</span>
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">imageOverlay</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nf">imageNamed</span><span class="p">:</span><span class="n">filterName</span><span class="p">];</span>
+    
+    <span class="n">GPUImagePicture</span> <span class="o">*</span><span class="n">picture_1</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImagePicture</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithImage</span><span class="p">:</span><span class="n">imageOriginal</span><span class="p">];</span>
+    <span class="n">GPUImagePicture</span> <span class="o">*</span><span class="n">picture_2</span> <span class="o">=</span> <span class="p">[[</span><span class="n">GPUImagePicture</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithImage</span><span class="p">:</span><span class="n">imageOverlay</span><span class="p">];</span>
+    
+    <span class="c1">// 3 - Target</span>
+    <span class="p">[</span><span class="n">picture_1</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">filter</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">picture_1</span> <span class="nf">processImage</span><span class="p">];</span>
+    
+    <span class="p">[</span><span class="n">picture_2</span> <span class="nf">addTarget</span><span class="p">:</span><span class="n">filter</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">picture_2</span> <span class="nf">processImage</span><span class="p">];</span>
+    
+    <span class="c1">// 4 - Blend</span>
+    <span class="n">UIImage</span> <span class="o">*</span><span class="n">destinationPhoto</span> <span class="o">=</span> <span class="p">[</span><span class="n">filter</span> <span class="nf">imageFromCurrentFramebuffer</span><span class="p">];</span>
+</code></pre></div></div>
+
+<ol>
+  <li>The first step, we should determine what is blend mode match with texture. For simply, I create object filter as GPUImageNormalBlendFilter class. And call [filter useNextFrameForImageCapture] for static image processing.</li>
+  <li>Convert UIImage object to GPUImagePicture</li>
+  <li>Add target and call -processImage to processing two images.</li>
+  <li>Call -imageFromCurrentFramebuffer to get destination image. If your final photo wrong orientation, call imageFromCurrentFramebufferWithOrientation: and pass original photo’s orientation.</li>
+</ol>
+
+<p>If you are confuse about <strong>step 1</strong>, please read <a href="http://www.sunsetlakesoftware.com/2014/03/17/switching-gpuimage-use-cached-framebuffers" title="Blog">this blog</a>, in the newest version GPUImage.</p>
+
+<p>Brad Larson changed the way for processing image because some memory structure issue, and make sure you MUST call <code class="language-plaintext highlighter-rouge">-useNextFrameForImageCapture</code>. If not, NSAsset will be fired.</p>
+
+<h1 id="note">Note</h1>
+
+<p>All of the method we called above is run in the main thread, if you process large image, it can block your main thread and UI will not responsive.</p>
+
+<p>You should consider calling it in background thread instead.</p>
+
+<p>In short, this video below will show you:</p>
+<iframe allowfullscreen="allowfullscreen" frameborder="0" height="415" src="//www.youtube.com/embed/nJ0UQQ8DfV0" width="600"></iframe>
+
+<h1 id="step-4--adding-animation">Step 4 – Adding animation</h1>
+
+<p>Step 4 is just option step. When you finished step 3, I think you can understand enough to implement. But if you wanna gain more User Experience, we should animate photo when applying new filter.</p>
+
+<div class="language-objc highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CABasicAnimation</span> <span class="o">*</span><span class="n">fadeOutAnimation</span> <span class="o">=</span> <span class="p">[</span><span class="n">CABasicAnimation</span> <span class="nf">animationWithKeyPath</span><span class="p">:</span><span class="s">@"contents"</span><span class="p">];</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">fromValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">__bridge</span> <span class="n">id</span><span class="p">)</span> <span class="n">_previousImage</span><span class="p">;</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">toValue</span> <span class="o">=</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="n">destinationPhoto</span><span class="p">.</span><span class="n">CGImage</span><span class="p">;</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">duration</span> <span class="o">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">6</span><span class="n">f</span><span class="p">;</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">timingFunction</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAMediaTimingFunction</span> <span class="nf">functionWithName</span><span class="p">:</span><span class="n">kCAMediaTimingFunctionEaseOut</span><span class="p">];</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">fillMode</span> <span class="o">=</span> <span class="n">kCAFillModeForwards</span><span class="p">;</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">removedOnCompletion</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+    
+    <span class="c1">// Delegate</span>
+    <span class="n">FeBasicAnimationBlock</span> <span class="o">*</span><span class="n">block</span> <span class="o">=</span> <span class="p">[[</span><span class="n">FeBasicAnimationBlock</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+    <span class="n">block</span><span class="p">.</span><span class="n">blockDidStart</span> <span class="o">=</span> <span class="o">^</span><span class="p">{</span>
+        <span class="n">_tableView</span><span class="p">.</span><span class="n">userInteractionEnabled</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">block</span><span class="p">.</span><span class="n">blockDidStop</span> <span class="o">=</span> <span class="o">^</span><span class="p">{</span>
+        <span class="n">_tableView</span><span class="p">.</span><span class="n">userInteractionEnabled</span> <span class="o">=</span> <span class="nb">YES</span><span class="p">;</span>
+        <span class="n">_previousImage</span> <span class="o">=</span> <span class="n">destinationPhoto</span><span class="p">.</span><span class="n">CGImage</span><span class="p">;</span>
+    <span class="p">};</span>
+    
+    <span class="c1">// Set delegate</span>
+    <span class="n">fadeOutAnimation</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">block</span><span class="p">;</span>
+    
+    <span class="p">[</span><span class="n">_imageView</span><span class="p">.</span><span class="n">layer</span> <span class="nf">addAnimation</span><span class="p">:</span><span class="n">fadeOutAnimation</span> <span class="nf">forKey</span><span class="p">:</span><span class="s">@"aa"</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>I created CABasicAnimation object and add to _imageView.layer. If you are familiar with CABasicAnimation, this is not problem for you. But not, I explain briefly.</p>
+
+<ol>
+  <li>Because I want to change Layer’s contents property, so I use CABasicAnimation instead of  [UIView animate…].</li>
+  <li>FromValue is the previous Image</li>
+  <li>ToValue is a new filtered image.</li>
+  <li>Adjust some property like duration, timingFunction, fillMode, …</li>
+  <li>Reuse FeBasicAnimationBlock which I created in a couple month ago, and pass itself is CABasicAnimation’s delegate.</li>
+  <li>Disable / Enable table view while animation is animating.</li>
+  <li>Adding animation to layer.</li>
+</ol>
+
+<p>Everything is done.</p>
+<iframe allowfullscreen="allowfullscreen" frameborder="0" height="415" src="//www.youtube.com/embed/8RetiD4N1IE" width="600"></iframe>
+
+<h1 id="project-sample-code">Project sample code</h1>
+
+<p><a href="https://github.com/NghiaTranUIT/FilterMe-Texture">Sample Code</a></p>
+
+<h1 id="what-i-covered">What I covered</h1>
+
+<p>So, There are many famous editing photo app in Appstore often use techniques or combine it to make new filter. If you want to build up the beautiful filter, you should spent more time to create new filter, textured sample in photoshop before coding.</p>
+
+<p>Have a questions ? Drop it here ;]</p>
+
+:ET
