@@ -1,6 +1,7 @@
 ---
 layout: post
-title: Proxyman - Modern and Delightful Web Debugging Proxy
+title: Proxyman - Modern. Native. Web Debugging Proxy
+
 date: '2019-04-05 16:21:31'
 tags:
 - charles
@@ -12,33 +13,5 @@ tags:
 
 Hey guys,
 
-I’m so excited to introduce you Proxyman ([https://proxyman.io](https://proxyman.io)), Modern and Delightful Web Debugging Proxy for macOS ♥️
 
-Proxyman is still my best side project I’ve worked on ⚡️
-
-## Features
-
-- ✅ Intercept HTTP/HTTPS (SSL) requests.
-- Support iOS simulator and iOS and Android device.
-- Websocket debugging.
-- Modern and intuitive UI.
-- Exclusively built for macOS.
-- Basic debugging tools: Compose, Repeat, filter,...
-- Advanced Tools: Map Local, External Proxying, No Caching, and Clear Cache.
-- Customizable workspace.
-- New feature, new improvement build every two weeks.
-- 100% free all essential features.
-- macOS 10.12+
-
-
-## Download
-
-Download at Proxyman’s landing page ([https://proxyman.io](https://proxyman.io))
-
-## Github
-
-If you have any questions or just found a bug 🐞, give me a shot at [https://github.com/ProxymanApp/Proxyman](https://github.com/ProxymanApp/Proxyman)
-
-![](https://proxyman.io/img/background/Dashboard_Proxyman_Update.jpg)
-
-
+![image tooltip here](/assets/resources/2019/04/main.png)
