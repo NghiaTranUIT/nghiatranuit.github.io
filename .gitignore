@@ -3,6 +3,8 @@ _site/
 .sass-cache/
 .vscode/
 
+.jekyll-cache/
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
