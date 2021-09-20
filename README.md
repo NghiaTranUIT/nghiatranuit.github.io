@@ -1,10 +1,9 @@
 ## Nghia Tran blog
 
-Personal lab that I could mess up the world.
+```bash
+$ bundle install
+$ bundle exec jekyll serve --incremental
+```
 
 ## Credit
 - [**Heiswayi Nrird**](https://heiswayi.nrird.com)
-
-## License
-
-[MIT](LICENSE)

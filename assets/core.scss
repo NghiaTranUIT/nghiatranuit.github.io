@@ -1,6 +1,9 @@
 ---
-# Front matter comment to ensure Jekyll properly reads file.
 ---
 
 @import 'main';
 @import 'syntax';
+
+.post-title {
+  font-size: 1.8rm;
+}

@@ -1,6 +1,6 @@
 # Site Info
 title:              "Noah Tran's mad lab"
-description:        "Write code"
+description:        "Noah Tran's mad lab"
 author_name:        "Noah Tran"
 logo_url:           https://avatars1.githubusercontent.com/u/5878421?v=4 # Get it from GitHub API: https://api.github.com/users/<username>
 
@@ -16,7 +16,7 @@ google_analytics:   UA-48305746-1
 
 # Site Settings
 url:                https://nghiatran.me # main url
-baseurl:            /
+baseurl:            
 permalink:          /:title # Post permalink
 timezone:           Asia/Kuala_Lumpur # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 mathjax:            true  # enables support for mathjax - set to 'false' to disable
@@ -27,7 +27,8 @@ markdown:           kramdown
 kramdown:
     input:          GFM
 sass:
-    style:          :compressed
+    style: compressed
+    sass_dir: _sass
 
 # Other Params
 include:            [ "robots.txt" ]
