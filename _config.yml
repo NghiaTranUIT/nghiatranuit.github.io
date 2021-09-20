@@ -27,7 +27,8 @@ markdown:           kramdown
 kramdown:
     input:          GFM
 sass:
-    style:          :compressed
+    style: compressed
+    sass_dir: _sass
 
 # Other Params
 include:            [ "robots.txt" ]
