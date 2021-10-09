@@ -1,0 +1,67 @@
+---
+layout: post
+title: '[Proxyman] console.log() for JavascriptCore'
+description: Implement console.log() function for JavascriptCore
+date: '2021-10-08 00:00:00'
+tags:
+- swift
+- macOS
+- iOS
+- tip
+---
+
+
+If you're using Proxyman, you might notice that the [Scripting](https://docs.proxyman.io/scripting/script) tool, which allows developers to write Javascript Code to easily manipulate Request/Response data.
+
+This feature is powered by [JavascriptCore](https://developer.apple.com/documentation/javascriptcore) framework from Apple.
+
+The following list will write down what the Scripting can do:
+- Modify the Request/Response data, include Headers, Body, Query, Encoded URL, ...
+- Built-in addons, such as MD5, JSON, Base64, UUID, ...
+- Build-in libraries, such as hashes.js, base64.js, lodash.js, crypto-js.min.js
+
+## console.log()
+
+It's essential to provide a function that the developer can debug their code. However, `console.log()` is not available in the JavascriptCore framework.
+
+Fortunately, JavascriptCore allows us to extend a new function that can mimic the basic logic of `console.log()`.
+
+The following snippet code would demonstrate how to do it.
+
+```swift
+// 1. Initialize context
+let context = JSContext()
+
+// 2. Register `_console.log` function that we can capture the log
+// Handy tool, so the user can use their existing JS code
+let consoleLog: @convention(block) (String) -> Void = {[weak script] message in
+  print(message)
+}
+context.setObject(consoleLog, forKeyedSubscript: "_consoleLog" as NSString)
+
+// 3. Provide a JS Wrapper
+let consoleLogFunc = """
+function isObject(val) {
+  if (val === null) { return false;}
+  return ( (typeof val === 'function') || (typeof val === 'object') );
+}
+
+var console = { log: function(message) {
+  if (isObject(message)) {
+    _consoleLog(JSON.stringify(message, null, '\t'));
+  } else {
+    _consoleLog(message);
+  }
+}}
+"""
+
+// 4. done
+context?.evaluateScript(consoleLogFunc)
+```
+
+Then, we can use it as usual.
+
+```js
+const myObject = { name: "Proxyman" };
+console.log(myObject)
+```
